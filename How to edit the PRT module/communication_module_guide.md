@@ -25,7 +25,7 @@ If you're already familiar with this module, use the following list as a quick r
 The PRT module is responsible for the way client and server communicate by exchanging `TR` structures, which includes the potential management of compatibility between different versions.
 
 <p align="center">
-	<img src="prt_diagram_ano.png" width="600" />
+	<img src="Images/prt_diagram_ano.png" width="600" />
 	<figcaption align="center">A diagram showing the PRT module converting TR structures received from and sent to clients using a different database version.</figcaption>
 </p>
 
@@ -44,7 +44,7 @@ The `registerFields` function contains a list of registering calls, one for each
 Registering a field implies declaring in the communication module "this field exists or has existed inside this object in *some* database version" (you will see later how to define *which* version). To make changes to the communication module, you only need to edit or add calls to the register functions.
 
 <p align="center">
-	<img src="prt_diagram_file.png" width="600" />
+	<img src="Images/prt_diagram_file.png" width="600" />
 	<figcaption align="center">A diagram of the PRT module and a typical PRT module C++ file.</figcaption>
 </p>
 
@@ -141,7 +141,7 @@ The `<class name>` in the macro is the name of the class representing the curren
 The `Tr_` classes can contain a `preProcessing` function to manage the `TR` structures that will be sent to a client, *before* actually sending them, and a `postProcessing` that manages incoming `TR` structures *before* forwarding them to the database. Contrary to what the names might suggest, both operations are done **after** registering the fields.
 
 <p align="center">
-	<img src="prepostprocessing.png" width="600" />
+	<img src="Images/prepostprocessing.png" width="600" />
 	<figcaption align="center">A diagram showing the order of pre and post-processing operations on a TR structure.</figcaption>
 </p>
 

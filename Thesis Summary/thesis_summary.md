@@ -10,7 +10,7 @@ Radiotherapy is currently one of the pillars of cancer treatment. It uses high-e
 Indeed, when radiation hits a patient, it does not stop at the tumor but instead spreads out. This creates what is called the peripheral dose: small amounts of radiation that reach healthy organs, sometimes far from the treated area.  
 Although these doses are low, they are not without risk. It has been shown that this stray radiation is a likely cause of secondary cancers, appearing years or even decades after treatment. Current clinical tools are very good at calculating the dose inside the beam, but often ignore the peripheral dose because it is extremely demanding in terms of computing resources.
 <p align="center">
-	<img src="stray_radiation_en.png" width="400" />
+	<img src="Images/stray_radiation_en.png" width="400" />
 	<figcaption align="center">A diagram showing a radiation beam targeting a tumor, and scattered particles reaching distant parts of the body.</figcaption>
 </p>
 
@@ -21,7 +21,7 @@ In medical physics, the gold standard for accuracy is a simulation technique cal
 However, there is a fundamental problem: the laws of statistics dictate that the more particles reach a specific region, the more accurate the calculation is in that area. Since the peripheral dose comes from rare events (particles that scatter at very large angles and travel long distances), an astronomical number of particles must be simulated to obtain a statistically reliable result outside the beam. For a doctor who has to plan a treatment, waiting three days (or three weeks!) for a simulation is simply not an option.
 
 <p align="center">
-	<img src="dose_dist.png" width="500" />
+	<img src="Images/dose_dist.png" width="500" />
 	<figcaption align="center">A graph showing the simulated radiation dose with regard to the distance from a vertical beam in a water tank. The uncertainty on the result (shown by the vertical bars on each data point) increases rapidly as the distance grows.</figcaption>
 </p>
 
@@ -36,7 +36,7 @@ Obviously, artificially adding many more particles should give an overestimated 
 That's all! These two conditions mathematically guarantee that the final result will be correct (I even had the opportunity to publish this demonstration in the journal Computer Physics Communications). Since many more particles reach the region of interest outside the beam, the accuracy of the result is greatly increased -or the duration decreased-.
 
 <p align="center">
-	<img src="transport_en.png" width="400" />
+	<img src="Images/transport_en.png" width="400" />
 	<figcaption align="center">A diagram showing the trajectory of a particle with the pseudo-deterministic transport technique. At each collision, a copy is forcefully sent toward the region of interest.</figcaption>
 </p>
 
@@ -51,8 +51,8 @@ Our team validated the system in two stages. First, through numerical validation
 We then carried out experimental validation. We set up real experiments using a real medical accelerator (which produces the radiation) and water tanks (which simulate human tissue) to compare our software’s predictions with actual physical measurements.
 
 <p align="center">
-	<img src="uncertainty.png" width="400" />
-	<img src="cuve.jpg" width="350" />
+	<img src="Images/uncertainty.png" width="400" />
+	<img src="Images/cuve.jpg" width="350" />
 	<figcaption align="center">A graph showing the uncertainty on the dose result for a simulation of a radiation beam in a water tank (second image). The uncertainty increases rapidly with the distance because fewer particles reach these regions. Inside the region of interest (the sphere on the right), the result is extremely precise and the uncertainty is close to 0%.</figcaption>
 </p>
 
