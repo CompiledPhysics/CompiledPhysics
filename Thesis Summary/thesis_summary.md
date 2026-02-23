@@ -1,4 +1,4 @@
-> :memo: **About this sample**
+> :memo: **About this sample**  
 This is a short summary of my PhD work made specifically for this portfolio. It is supposed to be targeting a general audience with no prior physics knowledge.
 
 ---

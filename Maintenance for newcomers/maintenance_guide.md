@@ -1,5 +1,5 @@
 
-> :memo: **About this sample**
+> :memo: **About this sample**  
 This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other, newer developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
 **Just to avoid any potential issue with confidentiality, I changed the names of all Atempo-owned assets.**
 
