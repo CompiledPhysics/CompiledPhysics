@@ -1,4 +1,4 @@
-:fr: À propos de cet exemple
+> :fr: **À propos de cet exemple**  
 Ceci est un court résumé de mon travail de thèse préparé spécialement pour ce portfolio. Il est destiné à un public général sans connaissances préalables en physique.
 J'ai ajouté le manuscrit complet au dépôt comme référence technique.
 

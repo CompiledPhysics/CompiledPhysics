@@ -1,4 +1,4 @@
-:fr: À propos de cet exemple
+> :fr: **À propos de cet exemple**  
 Ce document est construit à partir d'une collection de notes que j'ai écrites sur le processus de maintenance du code legacy : quel est le processus à suivre, quels outils sont à notre disposition, comment analyser les données récupérées par le support auprès des clients... J'ai ensuite organisé les notes dans ce document afin qu'il puisse aider d'autres développeurs, moins expérimentés, dans leur propre processus de maintenance. Ce guide suppose une certaine familiarité avec notre base de code et nos outils.
 **Pour éviter tout problème de confidentialité, j'ai changé les noms de tous les éléments appartenant à Atempo.**
 
