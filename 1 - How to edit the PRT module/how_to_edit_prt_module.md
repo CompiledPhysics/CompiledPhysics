@@ -11,6 +11,22 @@ This guide assumes basic knowledge of C structures and of our database structure
 
 ---
 
+# Summary
+- [What this guide is for](#What-this-guide-is-for)
+- [Introduction to the PRT communication module](#Introduction-to-the-PRT-communication-module)
+- [Adding or editing communication module declarations](#Adding-or-editing-communication-module-declarations)
+	- [Structure of the PRT module files](#Structure-of-the-PRT-module-files)
+	- [Basic syntax for registering a field](#Basic-syntax-for-registering-a-field)
+	- [First parameter : `<name>`](#First-parameter-:-`<name>`)
+	- [Second parameter :`<PRT type descriptor>`](#-Second-parameter-:`<PRT-type-descriptor>`)
+	- [Third parameter : `<position accessor>`](#-Third-parameter-:-`<position-accessor>`)
+	- [Fourth parameter : `<RegisterInfo>`](#Fourth-parameter-:-`<RegisterInfo>`)
+	- [Complete declaration sample](#Complete-declaration-sample)
+- [Compatibility management](#Compatibility-management)
+	- [Setting a value aside](#Setting-a-value-aside)
+	- [Pre-processing and post-processing](#Pre-processing-and-post-processing)
+- [Checking the validity of changes](#Checking-the-validity-of-changes)
+
 # What this guide is for
 
 The `PAtoms` database contains `TR` structures that represent all of the AtomXStore objects. **Changes in the database must always be reflected in the AtomXStore PRT communication module to ensure cross-version compatibility.** This document will give you the basic understanding and the tools necessary to safely make changes in the PRT communication module.

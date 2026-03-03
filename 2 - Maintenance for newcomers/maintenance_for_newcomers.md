@@ -8,6 +8,32 @@ This started as a collection of notes I wrote about the maintenance process of (
 
 ---
 
+# Summary
+- [1. Maintenance workflow](#1.-Maintenance-workflow)
+- [2. Analysis of available data](#2.-Analysis-of-available-data)
+	- [2.1 Environment Diagnostic Tool report analysis](#2.1-Environment-Diagnostic-Tool-report-analysis)
+	- [2.2 Logs analysis](#2.2-Logs-analysis)
+	- [2.3 Code analysis](#-2.3-Code-analysis)
+	- [2.4 Database analysis](#2.4-Database-analysis)
+- [3. Checking the code history](#3.-Checking-the-code-history)
+- [4. Debugging](#4.-Debugging)
+	- [4.1 Standard debug and profiling tools](#4.1-Standard-debug-and-profiling-tools)
+		- [4.1.1 GDB](#4.1.1-GDB)
+		- [4.1.2 Valgrind](#4.1.2-Valgrind)
+		- [4.1.3 Heaptrack](#4.1.3-Heaptrack)
+		- [4.1.4 Debug integration in VSCode](#4.1.4-Debug-integration-in-VSCode)
+	- [4.2 AtomXStore logStop mechanism](#4.2-AtomXStore-logStop-mechanism)
+	- [4.3 Use cases for simple Linux commands](#4.3-Use-cases-for-simple-Linux-commands)
+		- [4.3.1 Checking the current call stack of a process with pstack](#4.3.1-Checking-the-current-call-stack-of-a-process-with-pstack)
+		- [4.3.2 Displaying the mapped memory with pmap](#4.3.2-Displaying-the-mapped-memory-with-pmap)
+		- [4.3.3 Checking files and database integrity with md5sum](#4.3.3-Checking-files-and-database-integrity-with-md5sum)
+		- [4.3.4 Checking listening ports with netstat](#4.3.4-Checking-listening-ports-with-netstat)
+		- [4.3.5 Checking running services with ps](#4.3.5-Checking-running-services-with-ps)
+		- [4.3.6 Displaying environment variables with env](#4.3.6-Displaying-environment-variables-with-env)
+
+
+
+
 # 1. Maintenance workflow
 
 When Customer Support encounters or suspects a bug in AtomXStore, they will create a "Support Request" Jira ticket. The person in charge of dispatch will then assign the issue to the relevant developer depending on the type of issue (client/server side).
@@ -156,25 +182,25 @@ This section lists a number of simple commands that are especially useful for de
 ### 4.3.1 Checking the current call stack of a process with pstack
 `pstack` displays the current call of a running process. This is invaluable in cases where you suspect a deadlock issue, to check which processes are trying to take a lock. In cases where a process is running slow, you can loop the command as a quick profiling tool, to check which call appears more often and might be slowing things down.
 
-### 4.3.2 Display the mapped memory with pmap
+### 4.3.2 Displaying the mapped memory with pmap
 The command `pmap <PID>` displays a memory map of a running process. Although cases are rare, this can be useful to understand issues related to the memory mapping of the database (for example cases where too much memory is mapped).
 
-### 4.3.3 Check files and database integrity with md5sum
+### 4.3.3 Checking files and database integrity with md5sum
 `md5sum <file path>` creates a MD5 hash of a file. Use this to check the integrity of high-volume files after a network transfer. In the Customer Support's repository of client data, each database is associated to a MD5 hash in a text file. By comparing the hash with the one you generated locally, you can make sure the database is still valid after a transfer.
 
-### 4.3.4 Check listening ports with netstat
+### 4.3.4 Checking listening ports with netstat
 The `netstat` command displays active connections and listening ports, along with the processes using them.
 The following options are especially useful for troubleshooting networking issues between AtomXStore client and server:
 - `-n` (numeric) display IP addresses instead of resolving hostnames and port numbers instead of service names.
 - `-a` (all) display all connections, active and inactive ones.
 - `-p` (process) display the PID of processes.
 
-### 4.3.5 Check running services with ps
+### 4.3.5 Checking running services with ps
 Process Status, `ps`, displays a list of running processes. Use options:
 - `-a` to show all users.
 - `-e` to show every process including background ones (specifically the AtomXStore daemon).
 - `-f` to show detailed information.
 Then pipe the output to a `grep atomxstore` to filter AtomXStore processes. This is your main way of monitoring these processes.
 
-### 4.3.6 Display environment variables with env
+### 4.3.6 Displaying environment variables with env
 The `env` command displays a full list of environment variables. This is useful for configuration issues, for instance when the AtomXStore install path is not found when starting a process. Again, use `grep` on the output to filter variables as needed.
