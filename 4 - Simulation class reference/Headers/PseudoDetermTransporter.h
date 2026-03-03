@@ -61,7 +61,8 @@ namespace mc
          * @throws                std::invalid_argument if source or geometry are 
          *                        nullptr or an inconsistency is detected between
          *                        the region of interest and the (loaded) importance map.
-         * Calls setupImportanceMap() the read or create the file to the map.
+         *
+         * Calls setupImportanceMap() to read or create the file to the map.
          */
         PseudoDetermTransporter(Source*            source,
                                 Geometry*          geometry,
