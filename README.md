@@ -3,7 +3,7 @@ This GitHub account is a dedicated portfolio showcasing my transition from resea
 1. `How to edit the PRT module` : a practical guide to making changes in a specific legacy module
 2. `Maintenance for newcomers` : an introduction to the legacy code maintenance process and associated tools
 3. `Thesis Summary` : a short summary of my PhD work
-4. `Simulation class reference` : a class reference for a small fictional simulation framework
+4. `Simulation class reference` : a class reference for a small fictional simulation framework with [Doxygen documentation](https://compiledphysics.github.io/CompiledPhysics/)
    
 Each one includes some additional context at the beginning.
 
@@ -12,6 +12,6 @@ Ce compte GitHub est un portfolio présentant ma transition de la recherche et d
 1. `How to edit the PRT module` : un guide pratique pour réaliser des modifications d'un ancien module
 2. `Maintenance for newcomers` : une présentation du processus de maintenance du code et des outils associés
 3. `Thesis Summary` : un court résumé de mon travail de thèse
-4. `Simulation class reference` : une référence de classes pour un petit module fictif de simulation
+4. `Simulation class reference` : une référence de classes pour un petit module fictif de simulation avec [documentation Doxygen](https://compiledphysics.github.io/CompiledPhysics/)
    
 Chaque fichier inclut quelques phrases de contexte supplémentaire.
