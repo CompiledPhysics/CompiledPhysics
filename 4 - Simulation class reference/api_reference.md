@@ -149,7 +149,7 @@ The `void interact()` method performs an interaction between the current `Partic
 
 Giving a null pointer to `insertParticle` does nothing.
 
-:warning: **IMPORTANT** :warning: The `Transporter` takes ownership of any `Particle` added through this method. It may delete them after an interaction and destroys all remaining particles in its destructor.
+>:warning: **IMPORTANT** :warning: The `Transporter` takes ownership of any `Particle` added through this method. It may delete them after an interaction and destroys all remaining particles in its destructor.
 
 ## Typical simulation workflow
 The methods of the `Transporter` are designed to provide the tools for simulating particle tracks. A typical simulation workflow is represented below:
@@ -202,17 +202,17 @@ PseudoDetermTransporter(Source*            source,
                         const std::string& importanceFile);
 ```
 `mode` is the simulation mode, either `PseudoDetermTransporter::Mode::Generation` or `PseudoDetermTransporter::Mode::Usage`.  
-:memo: Note: using invalid mode will default in `Usage` mode.
+>:memo: Note: using invalid mode will default in `Usage` mode.
 
 `roiCenter` is the center of the spherical region of interest (coordinates in cm from the geometry reference).  
 `roiRadius` is the radius of the region of interest (in cm).
 
 `importanceFile` is the path to the importance map file (to either load or save the map depending on the mode).  
-:memo: Note: if no map can be loaded in `Usage` mode, the importance mechanism is disabled.
+>:memo: Note: if no map can be loaded in `Usage` mode, the importance mechanism is disabled.
 
 Because the `Generation` mode is slow, it is recommended to first generate an importance map with a short run, and then use it for the actual simulation that needs to be optimized.
 
-:warning: **IMPORTANT** :warning: **One** importance map corresponds to **one** region of interest (it defines which regions of space contribute to *this* area in particular) and will decrease efficiency if used improperly. Therefore, the constructor checks the consistency between the current area of interest and the one used to generate the map (stored in the file). If they do not match, the constructor throws `std::invalid_argument` and displays the reason for the error.
+>:warning: **IMPORTANT** :warning: **One** importance map corresponds to **one** region of interest (it defines which regions of space contribute to *this* area in particular) and will decrease efficiency if used improperly. Therefore, the constructor checks the consistency between the current area of interest and the one used to generate the map (stored in the file). If they do not match, the constructor throws `std::invalid_argument` and displays the reason for the error.
 
 ## Accessors
 ### mode
@@ -242,7 +242,7 @@ In a normal case, it performs an interaction as the base class does, with additi
 - It sets the `isCopied()` flag to `true` for the original particle.
 - Also depending on the local importance, it might delete the current particle and return immediately.
 
-:warning: Although it is limited to 1000 per interaction, this implementation may create a very large number of new particles over time. It increases the overall efficiency, but might increase the time required per initial particle generated (and use a lot of memory during a run).
+>:warning: Although it is limited to 1000 per interaction, this implementation may create a very large number of new particles over time. It increases the overall efficiency, but might increase the time required per initial particle generated (and use a lot of memory during a run).
 
 
 
