@@ -17,10 +17,10 @@ This guide assumes basic knowledge of C structures and of our database structure
 - [Adding or editing communication module declarations](#Adding-or-editing-communication-module-declarations)
 	- [Structure of the PRT module files](#Structure-of-the-PRT-module-files)
 	- [Basic syntax for registering a field](#Basic-syntax-for-registering-a-field)
-	- [First parameter : `<name>`](#First-parameter-:-`<name>`)
-	- [Second parameter :`<PRT type descriptor>`](#-Second-parameter-:`<PRT-type-descriptor>`)
-	- [Third parameter : `<position accessor>`](#-Third-parameter-:-`<position-accessor>`)
-	- [Fourth parameter : `<RegisterInfo>`](#Fourth-parameter-:-`<RegisterInfo>`)
+	- [First parameter : name](#First-parameter-:-name)
+	- [Second parameter : PRT type descriptor](#-Second-parameter-:PRT-type-descriptor)
+	- [Third parameter : position accessor](#-Third-parameter-:-position-accessor)
+	- [Fourth parameter : RegisterInfo](#Fourth-parameter-:-RegisterInfo)
 	- [Complete declaration sample](#Complete-declaration-sample)
 - [Compatibility management](#Compatibility-management)
 	- [Setting a value aside](#Setting-a-value-aside)
@@ -90,10 +90,10 @@ where `AtomStruct` is the (usually only) parameter of the `registerFields` funct
 This section will give you the necessary information to add or edit any registering declaration.
 
 
-### First parameter : `<name>`
+### First parameter : name
 `<name>` defines the name of the field in the `TR` structure. It is simply a `const char*` value, for example `"field_name"`, and must match the name declared in the database (see `atom_structures.h`).
 
-### Second parameter :`<PRT type descriptor>`
+### Second parameter : PRT type descriptor
 The correct PRT type descriptor to use depends on the type of the field in the `TR` structure. The most common type descriptors include:
 |Descriptor|Standard C++ type|
 |-----|-----|
@@ -105,14 +105,14 @@ The correct PRT type descriptor to use depends on the type of the field in the `
 
 Refer to the file `prt_type_descriptors.cpp` for a full list of PRT type descriptors.
 
-### Third parameter : `<position accessor>`
+### Third parameter : position accessor
 Position accessors specify where in the `TR` structure the value of the field will be stored (in the case of sending a message to a client) or is expected (in the case of receiving a message from a client).
 
 Use the macro `FIELD_POSITION(<TR structure>, <field position in structure>)` to call position accessors.
 
 > :bulb: For example, use `FIELD_POSITION(TR_ATOM_TRANSFER, u.str.u.xtr.atom_name))` for the field `atom_name` inside nested unions `u.str.u.xtr` of the `TR_ATOM_TRANSFER` structure.
 
-### Fourth parameter : `<RegisterInfo>`
+### Fourth parameter : RegisterInfo
 This parameter is used to specify a transfer mask (optional) and versioning information (mandatory). Its basic form is simply `RegisterInfo()` and can be used as such.
 
 To add a transfer mask, append it to the `RegisterInfo()` parameter: `RegisterInfo().mask(transfer_mask, <TRANSFER_MASK>)`. The variable `transfer_mask` is a parameter of the `registerFields` function for structures than can use transfer masks. Each mask corresponds to a `#define` in `tr_masks.h`. 

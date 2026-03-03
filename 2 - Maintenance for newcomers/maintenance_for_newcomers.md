@@ -13,7 +13,7 @@ This started as a collection of notes I wrote about the maintenance process of (
 - [2. Analysis of available data](#2.-Analysis-of-available-data)
 	- [2.1 Environment Diagnostic Tool report analysis](#2.1-Environment-Diagnostic-Tool-report-analysis)
 	- [2.2 Logs analysis](#2.2-Logs-analysis)
-	- [2.3 Code analysis](#-2.3-Code-analysis)
+	- [2.3 Code analysis](#2.3-Code-analysis)
 	- [2.4 Database analysis](#2.4-Database-analysis)
 - [3. Checking the code history](#3.-Checking-the-code-history)
 - [4. Debugging](#4.-Debugging)
