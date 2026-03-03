@@ -1,6 +1,6 @@
 
 > :fr: **À propos de cet exemple**  
-Ce document est une référence pour des classes fictives créées pour ce portfolio, basées sur mon travail de thèse, et censées être utilisées pour réaliser une simulation Monte Carlo en radiothérapie.
+Ce document est une référence pour des classes fictives créées pour ce portfolio, basées sur mon travail de thèse, et conçues pour être utilisées pour réaliser une simulation Monte Carlo en radiothérapie.
 Les headers sont disponibles dans le dossier `Headers` et contiennent leur propre [documentation au format Doxygen](https://compiledphysics.github.io/CompiledPhysics/).
 
 
@@ -84,22 +84,22 @@ The `Transporter` class is designed to be used for dose calculations in Monte Ca
 Repeating this loop until the particle is absorbed by its environment (i.e. its energy is too low to keep going) simulates what is called a particle track. Repeating many particle tracks to collect statistical data about deposited energy is the basis for Monte Carlo simulation applied to radiotherapy.
 
 ## Class introduction
-The `Transporter` is an abstract class that provides the basic tools to apply the transport algorithm to particles and simulate particle tracks. This base class is meant to be derived into more specific transport algorithms that implement their own movement and interaction models.
+The `Transporter` is a pure virtual class that provides the basic tools to apply the transport algorithm to particles and simulate particle tracks. This base class is designed to be derived into more specific transport algorithms that implement their own movement and interaction models, but still implements the basic form of particle transport in its methods (to be called by derived classes as needed).
 The class uses three data members:
-- a `Source` object that initializes the `Particle`s to be transported.
+- a `Source` object that initializes the particles to be transported.
 - a `Geometry` object that contains all the geometrical and physical data of the simulation environment, as well as deposited energy information.
 - an internal list of `Particle` pointers (stored in a `std::vector<Particle*>`).
 
 Both the `Source` and `Geometry` are external to the `Transporter`: they have to be created first, and destroyed only after the `Transporter`, which does not own them but only stores pointers to them.
 The list of particles, however, is fully internal to the class and is freed when the `Transporter` is destroyed. The list is sorted from lowest to highest energy, which allows simulating first the `Particles` with the shortest tracks (as they may be absorbed faster), thus keeping the internal list as short as possible for memory optimization.
 
-The main class methods for particle transport are the following:
+The main methods for particle transport are the following:
 |Name|Purpose|
 |---|---|
 |`step`|Handles the particle movement|
 |`interact`|Handles the particle interactions|
 
-Both of those can be overridden with various transport algorithms and models. The class also includes helper methods to allow monitoring of the internal `Particle` list.
+Both of those can be overridden with various transport algorithms and physical models. The class also includes helper methods to allow monitoring of the internal `Particle` list.
 
 ## Constructor & Destructor
 The `Transporter`'s only constructor uses the following prototype:
@@ -117,7 +117,7 @@ The `Particle` list can be accessed with a constant reference to the internal ve
 
 `const std::vector<Particle*>& particles() const noexcept`
 
-This can be used to monitor the state of the particle list and access an individual `Particle`, but does not allow adding or deleting particles. For this, use `insertParticle(Particle*)` instead.
+This can be used to monitor the state of the particle list and access any individual `Particle`, but does not allow adding or deleting particles. For this, use `insertParticle(Particle*)` instead.
 
 ## Simulation methods
 ### initializeFromSource
@@ -135,21 +135,21 @@ The `bool step()` method moves the current `Particle` (the first of the list) in
 This only modifies the position of a particle, but does not add deposited energy to the `Geometry` data. This method will delete the particle if it goes outside the boundaries of the simulation and return `false` in that case (`true` otherwise).
 
 ### interact
-The `void interact()` method performs an interaction between the current `Particle` and the environment. First, the type of interaction is randomly determined according to the material properties of the current position (through the `Geometry`). Then, the interaction is simulated and the particle may:
+The `void interact()` method performs an interaction between the current `Particle` and the environment. First, the type of interaction is randomly determined according to the material properties of the current position through the `Geometry`. Then, the interaction is simulated and the particle may:
 - Change direction
 - Lose energy
 - Disappear (particles under a certain energy threshold are considered irrelevant and are deleted after an interaction)
 - Generate any number of new particles, of different types, that are added to the internal list
 
-`interact` immediately deletes the current particle if it is located outside the geometry boundaries.
+`interact` immediately deletes the current particle if it is located outside the geometrical boundaries.
 
 
 ### insertParticle
-`void insertParticle(Particle*)` adds a single `Particle` to the internal list. It can be used for testing purposes or specific algorithms, but for general purposes please use `initializeFromSource` as it is much more efficient.
+`void insertParticle(Particle*)` adds a single `Particle` to the internal list. It can be used for testing purposes or specific algorithms, but for general purposes please note that `initializeFromSource` is much more efficient.
 
-Giving a null pointer to `insertParticle` does nothing.
+Giving a null pointer to `insertParticle` has no effect.
 
->:warning: **IMPORTANT** :warning: The `Transporter` takes ownership of any `Particle` added through this method. It may delete them after an interaction and destroys all remaining particles in its destructor.
+>:warning: **IMPORTANT** :warning: The `Transporter` takes ownership of any `Particle` added through this method. It may delete them after a step or an interaction and it destroys all remaining particles in its destructor.
 
 ## Typical simulation workflow
 The methods of the `Transporter` are designed to provide the tools for simulating particle tracks. A typical simulation workflow is represented below:
@@ -168,30 +168,33 @@ flowchart TD
 
     E --> C
 ```
+
+
 # PseudoDetermTransporter class
 ## Basic principle
-The `PseudoDetermTransporter` class applies the pseudo-deterministic rules to particle transport in addition to the regular physical models. This algorithm is based on the definition of a spherical area of interest in which the deposited energy calculation is usually slow because only a small number of particles reach that area. Then, at every interaction that a particle undergoes:
-- The original particle is copied and copies are sent directly to the region of interest.
+The `PseudoDetermTransporter` class applies the pseudo-deterministic transport rules to particle transport in addition to the regular physical models. This algorithm is designed to increase the calculation efficiency in areas that only few particles reach, causing the statistical uncertainty to be high. It is based on the definition of a spherical area of interest that should surround the low-population area. Then, at every interaction that a particle undergoes:
+- The original particle is copied, and copies are sent directly to the region of interest.
 - Any contribution made by these copies is weighted by the probability of them actually being scattered in that direction and reaching the area of interest.
 - The original particle is deleted without further contribution to the deposited energy if it enters the region of interest.
 
-Strictly enforcing these conditions ensures that the deposited energy result inside and outside the region of interest is unbiased. The difference from regular particle transport is that many more particles reach the area of interest, thus significantly reducing the uncertainty on the result for a similar simulation time.
+Strictly enforcing these conditions ensures that the deposited energy result inside and outside the region of interest is unbiased. The difference from regular particle transport is that many more particles reach the area of interest, thus significantly reducing the statistical uncertainty on the result for a similar simulation time.
 
-Additionally, it uses an importance map mechanism. The importance map contains information about which regions of space contribute the most to the number of particles inside the region of interest. Creating more copies in these regions is a good way to improve the efficiency, as copies created there will most likely have an important weight (they were likely to reach the area of interest) and therefore are worth following. The map is used to determine which action to take to improve the simulation efficiency:
+Additionally, the `PseudoDetermTransporter` uses an importance map mechanism. The importance map contains information about which regions of space contribute the most to the number of particles inside the region of interest. Creating more copies in these regions is a good way to improve the efficiency, as copies created there will most likely have an important weight (as they were likely to reach the area of interest) and therefore are worth following. Conversely, particles creates in low-contribution areas can be deleted to save computation time. The map is used to determine which action to take to improve the simulation efficiency:
 
 |Local map property|Action|Effect|
 |-|-|-|
-|High contribution|Create more copies|Increase the efficiency per simulated particle|
-|Normal contribution|None|Do not lose time creating copies|
-|Low contribution|Potentially delete the current particle|Save computing time for irrelevant particles|
+|High contribution area|Create more copies|Increase the efficiency per simulated particle|
+|Normal contribution area|None|Do not lose time creating copies|
+|Low contribution area|Potentially delete the current particle|Save computing time for irrelevant particles|
 
 ## Class introduction
-The `PseudoDetermTransporter` class is a specific derivation of the `Transporter` with overridden `step` and `interact` methods. It is designed to preserve the workflow of the base `Transporter` class, so that it can be used instead with no changes to your transport algorithm.
+The `PseudoDetermTransporter` class is a specific derivation of the `Transporter` class with overridden `step` and `interact` methods. It is designed to preserve the workflow of the base `Transporter` class, so that it can replace it with no changes to a pre-existing transport algorithm.
 
-In addition, it uses an internal `ImportanceMap` pointer. Its specific accessors allow retrieving the path of the importance map file and the `mode` in which it is operating. The *Generation* mode creates the importance map, initializes it with null values, fills it as tracks are simulated, and saves it to a file. The *Usage* mode loads an importance map from a file and uses it to optimize the efficiency.
+In addition to the base class, it uses an internal `ImportanceMap` pointer (allocated at creation). Its specific accessors allow retrieving the path of the importance map file and the `mode` in which it is operating:
+- the *Generation* mode creates the importance map, initializes it with null values, fills it as tracks are simulated, and saves it to a file.
+- the *Usage* mode loads an importance map from a file and uses it to optimize the efficiency.
 
 ## Constructor & Destructor
-
 The constructor uses the same `Source` and `Geometry` as the base class, but has additional parameters regarding the region of interest and importance map:
 ```
 PseudoDetermTransporter(Source*            source,
@@ -202,7 +205,7 @@ PseudoDetermTransporter(Source*            source,
                         const std::string& importanceFile);
 ```
 `mode` is the simulation mode, either `PseudoDetermTransporter::Mode::Generation` or `PseudoDetermTransporter::Mode::Usage`.  
->:memo: Note: using invalid mode will default in `Usage` mode.
+>:memo: Note: using an invalid mode will default in `Usage` mode.
 
 `roiCenter` is the center of the spherical region of interest (coordinates in cm from the geometry reference).  
 `roiRadius` is the radius of the region of interest (in cm).
@@ -210,9 +213,9 @@ PseudoDetermTransporter(Source*            source,
 `importanceFile` is the path to the importance map file (to either load or save the map depending on the mode).  
 >:memo: Note: if no map can be loaded in `Usage` mode, the importance mechanism is disabled.
 
-Because the `Generation` mode is slow, it is recommended to first generate an importance map with a short run, and then use it for the actual simulation that needs to be optimized.
+Because the `Generation` mode is slow and the importance map doesn't need much data to be effective, it is recommended to first generate an importance map with a short run, and then use it for the actual simulation that needs to be optimized.
 
->:warning: **IMPORTANT** :warning: **One** importance map corresponds to **one** region of interest (it defines which regions of space contribute to *this* area in particular) and will decrease efficiency if used improperly. Therefore, the constructor checks the consistency between the current area of interest and the one used to generate the map (stored in the file). If they do not match, the constructor throws `std::invalid_argument` and displays the reason for the error.
+>:warning: **IMPORTANT** :warning: **One** importance map corresponds to **one** region of interest (it defines which regions of space contribute to *this* area in particular) and may decrease efficiency if used improperly. Therefore, in `Usage` mode, the constructor checks the consistency between the current area of interest and the one used to generate the map (stored in the file). If they do not match, the constructor throws `std::invalid_argument`.
 
 ## Accessors
 ### mode
@@ -226,21 +229,22 @@ The `Mode mode() const noexcept` accessor returns one of the two values of the p
 ## Simulation methods
 
 ### step
-In addition to the base class behaviour (deleting the particle and returning `false` if it goes out of bounds), the `PseudoDetermTransporter`, the `step` method is responsible for preventing copy particles from entering the region of interest. It starts by checking whether the current particle has the `isCopied == true` flag. If it does and is located inside the region of interest, it is deleted and the function returns `false`.
-|Particle state|Behaviour|Return value|
+In addition to the base class behaviour (deleting the particle and returning `false` if it goes out of bounds), for the `PseudoDetermTransporter`, the `step` method is responsible for preventing copied particles from entering the region of interest. It starts by checking whether the current particle has the `isCopied == true` flag. If it does and is located inside the region of interest after moving, it is deleted and the function returns `false`.
+|Particle state after moving|Behaviour|Return value|
 |-|-|-|
 |Out of geometrical boundaries|Delete particle|`false`|
-|Inside geometrical boundaries|Move particle|`true`|
+|Inside geometrical boundaries| - |`true`|
 |Inside ROI + has isCopied flag|Delete particle|`false`|
 
 ### interact
 The overridden `void interact()` method implements most of the pseudo-deterministic transport algorithm.
 
-In a normal case, it performs an interaction as the base class does, with additional elements:
+It performs an interaction as the base `Transporter` does, with additional elements:
 - It evaluates the local importance from the `ImportanceMap`.
 - It creates any number of additional weighted copies of the current particle, depending on the local importance value.
+- It places them inside the area of interest.
 - It sets the `isCopied()` flag to `true` for the original particle.
-- Also depending on the local importance, it might delete the current particle and return immediately.
+- Depending on the local importance, it might delete the current particle and return immediately.
 
 >:warning: Although it is limited to 1000 per interaction, this implementation may create a very large number of new particles over time. It increases the overall efficiency, but might increase the time required per initial particle generated (and use a lot of memory during a run).
 
@@ -259,7 +263,7 @@ int main()
     Source   source;   // assuming correct initialization
 
     // Define a spherical region of interest
-    Vec3d  roiCenter{0.0, 0.0, 0.0}; // position 0, 0, 0 cm from the reference
+    Vec3d  roiCenter{0.0, 0.0, 0.0}; // position 0, 0, 0 cm from the point of reference
     double roiRadius = 10.0;        // Radius 10 cm
 
     // Importance map file used for generation or usage
@@ -275,10 +279,10 @@ int main()
         importanceFile
     );
 
+    // How many particles the simulation will track
     int particleNumber = 1000000;
 
     // Initialize particle list with the requested number of particles from the source
-    // This could be inside the main loop, with a different break condition.
     transporter.initializeFromSource(particleNumber);
 
     // 3. Main transport loop: step + interact until no particles remain

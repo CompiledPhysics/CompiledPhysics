@@ -55,9 +55,12 @@ namespace mc
          * @param geometry        Pointer to an external simulation geometry.
          * @param mode            Operating mode (Generation or Usage).
          * @param roiCenter       Center of the spherical region of interest.
-         * @param roiRadius       Radius of the spherical region of interest.
+         * @param roiRadius       Radius in cm of the spherical region of interest.
          * @param importanceFile  Path to the importance map file used for
          *                        reading (Usage) or writing (Generation).
+         * @throws                std::invalid_argument if source or geometry are 
+         *                        nullptr or an inconsistency is detected between
+         *                        the region of interest and the (loaded) importance map.
          * Calls setupImportanceMap() the read or create the file to the map.
          */
         PseudoDetermTransporter(Source*            source,

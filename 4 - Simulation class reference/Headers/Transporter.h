@@ -33,9 +33,10 @@ namespace mc
     {
     public:
         /// @brief Constructor. Both parameters must be already allocated and point to valid objects.
-        /// @param p_source   Pointer to an external particle `Source`.
-        /// @param p_geometry Pointer to an external simulation `Geometry`.
-        explicit Transporter(Source *p_source, Geometry *p_geometry);
+        /// @param source   Pointer to an external particle `Source`.
+        /// @param geometry Pointer to an external simulation `Geometry`.
+        /// @throws         std::invalid_argument if source or geometry are nullptr.
+        explicit Transporter(Source* source, Geometry* geometry);
 
         /// @brief Virtual destructor.
         /// Deletes all remaining particles stored in the internal list.
@@ -90,9 +91,9 @@ namespace mc
         /// The insertion is done at the correct index depending on the energy
         /// of the particle.
         ///
-        /// @param p_particle A pointer to the `Particle` to be inserted.
+        /// @param particle A pointer to the `Particle` to be inserted.
         ///
-        void insertParticle(Particle* p_particle);
+        void insertParticle(Particle* particle);
 
     protected:
         /// @brief Removes the particle at the given index from the list.
