@@ -109,8 +109,8 @@ Inheritance diagram for mc::Transporter:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8ad06794ccb70cc3d408478f5a3270ee" id="r_a8ad06794ccb70cc3d408478f5a3270ee"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a8ad06794ccb70cc3d408478f5a3270ee">Transporter</a> (Source *p_source, Geometry *p_geometry)</td></tr>
-<tr class="memdesc:a8ad06794ccb70cc3d408478f5a3270ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. Both parameters must be already allocated and point to valid objects.  <br /></td></tr>
+<tr class="memitem:a379c708bdb207fdc57eacf9967081f8b" id="r_a379c708bdb207fdc57eacf9967081f8b"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#a379c708bdb207fdc57eacf9967081f8b">Transporter</a> (Source *source, Geometry *geometry)</td></tr>
+<tr class="memdesc:a379c708bdb207fdc57eacf9967081f8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. Both parameters must be already allocated and point to valid objects.  <br /></td></tr>
 <tr class="memitem:a8b4ae002e4a319cde514a51d08484328" id="r_a8b4ae002e4a319cde514a51d08484328"><td class="memItemLeft"><a id="a8b4ae002e4a319cde514a51d08484328" name="a8b4ae002e4a319cde514a51d08484328"></a>
 virtual&#160;</td><td class="memItemRight"><b>~Transporter</b> ()</td></tr>
 <tr class="memdesc:a8b4ae002e4a319cde514a51d08484328"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor. Deletes all remaining particles stored in the internal list. <span class="tt">Source</span> and <span class="tt">Geometry</span> must be deleted by the caller. <br /></td></tr>
@@ -126,8 +126,8 @@ bool&#160;</td><td class="memItemRight"><b>hasParticles</b> () const noexcept</t
 <tr class="memdesc:acae9aa68a8c58179228dff5ea977287f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Moves the next particle in its current direction.  <br /></td></tr>
 <tr class="memitem:a56384abf260022e45149782b6ceac8bc" id="r_a56384abf260022e45149782b6ceac8bc"><td class="memItemLeft">virtual void&#160;</td><td class="memItemRight"><a class="el" href="#a56384abf260022e45149782b6ceac8bc">interact</a> ()=0</td></tr>
 <tr class="memdesc:a56384abf260022e45149782b6ceac8bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Performs an interaction for the current particle.  <br /></td></tr>
-<tr class="memitem:a6ae264a419a74e8451e56a612940d257" id="r_a6ae264a419a74e8451e56a612940d257"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6ae264a419a74e8451e56a612940d257">insertParticle</a> (Particle *p_particle)</td></tr>
-<tr class="memdesc:a6ae264a419a74e8451e56a612940d257"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert a particle inside the internal list.  <br /></td></tr>
+<tr class="memitem:a483764a4977c4a543a83e4451225360f" id="r_a483764a4977c4a543a83e4451225360f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a483764a4977c4a543a83e4451225360f">insertParticle</a> (Particle *particle)</td></tr>
+<tr class="memdesc:a483764a4977c4a543a83e4451225360f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert a particle inside the internal list.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pro-methods" class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -165,8 +165,8 @@ Source *&#160;</td><td class="memItemRight"><b>m_source</b> {nullptr}</td></tr>
 </li>
 </ul>
 </div><a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8ad06794ccb70cc3d408478f5a3270ee" name="a8ad06794ccb70cc3d408478f5a3270ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ad06794ccb70cc3d408478f5a3270ee">&#9670;&#160;</a></span>Transporter()</h2>
+<a id="a379c708bdb207fdc57eacf9967081f8b" name="a379c708bdb207fdc57eacf9967081f8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a379c708bdb207fdc57eacf9967081f8b">&#9670;&#160;</a></span>Transporter()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,12 +177,12 @@ Source *&#160;</td><td class="memItemRight"><b>m_source</b> {nullptr}</td></tr>
         <tr>
           <td class="memname">mc::Transporter::Transporter </td>
           <td>(</td>
-          <td class="paramtype">Source *</td>          <td class="paramname"><span class="paramname"><em>p_source</em></span>, </td>
+          <td class="paramtype">Source *</td>          <td class="paramname"><span class="paramname"><em>source</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">Geometry *</td>          <td class="paramname"><span class="paramname"><em>p_geometry</em></span>&#160;)</td>
+          <td class="paramtype">Geometry *</td>          <td class="paramname"><span class="paramname"><em>geometry</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -195,8 +195,14 @@ Source *&#160;</td><td class="memItemRight"><b>m_source</b> {nullptr}</td></tr>
 <p>Constructor. Both parameters must be already allocated and point to valid objects. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_source</td><td>Pointer to an external particle <span class="tt">Source</span>. </td></tr>
-    <tr><td class="paramname">p_geometry</td><td>Pointer to an external simulation <span class="tt">Geometry</span>. </td></tr>
+    <tr><td class="paramname">source</td><td>Pointer to an external particle <span class="tt">Source</span>. </td></tr>
+    <tr><td class="paramname">geometry</td><td>Pointer to an external simulation <span class="tt">Geometry</span>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>if source or geometry are nullptr. </td></tr>
   </table>
   </dd>
 </dl>
@@ -232,8 +238,8 @@ Source *&#160;</td><td class="memItemRight"><b>m_source</b> {nullptr}</td></tr>
 
 </div>
 </div>
-<a id="a6ae264a419a74e8451e56a612940d257" name="a6ae264a419a74e8451e56a612940d257"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6ae264a419a74e8451e56a612940d257">&#9670;&#160;</a></span>insertParticle()</h2>
+<a id="a483764a4977c4a543a83e4451225360f" name="a483764a4977c4a543a83e4451225360f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a483764a4977c4a543a83e4451225360f">&#9670;&#160;</a></span>insertParticle()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -241,7 +247,7 @@ Source *&#160;</td><td class="memItemRight"><b>m_source</b> {nullptr}</td></tr>
         <tr>
           <td class="memname">void mc::Transporter::insertParticle </td>
           <td>(</td>
-          <td class="paramtype">Particle *</td>          <td class="paramname"><span class="paramname"><em>p_particle</em></span></td><td>)</td>
+          <td class="paramtype">Particle *</td>          <td class="paramname"><span class="paramname"><em>particle</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -251,7 +257,7 @@ Source *&#160;</td><td class="memItemRight"><b>m_source</b> {nullptr}</td></tr>
 <p>The list is sorted from low to high energy. The insertion is done at the correct index depending on the energy of the particle.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_particle</td><td>A pointer to the <span class="tt">Particle</span> to be inserted. </td></tr>
+    <tr><td class="paramname">particle</td><td>A pointer to the <span class="tt">Particle</span> to be inserted. </td></tr>
   </table>
   </dd>
 </dl>
