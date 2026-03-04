@@ -28,8 +28,7 @@ This guide assumes basic knowledge of C structures and of our database structure
 - [Checking the validity of changes](#Checking-the-validity-of-changes)
 
 # What this guide is for
-
-The `PAtoms` database contains `TR` structures that represent all of the AtomXStore objects. **Changes in the database must always be reflected in the AtomXStore PRT communication module to ensure cross-version compatibility.** This document will give you the basic understanding and the tools necessary to safely make changes in the PRT communication module.
+This document will give you the basic understanding and the tools necessary to safely make changes in the PRT communication module when required.
 
 If you're already familiar with this module, use the following list as a quick reminder of the process:
 1. Locate the file `PRT_<name>.cpp/h` relevant to the object modified in the `PAtoms` database.
@@ -43,16 +42,20 @@ If you're already familiar with this module, use the following list as a quick r
 
 
 # Introduction to the PRT communication module
-
-The PRT module is responsible for the way client and server communicate by exchanging `TR` structures, which includes the potential management of compatibility between different versions.
+The `PAtoms` database contains `TR` structures that represent all of the AtomXStore objects. The PRT module is responsible for the way client and server communicate by exchanging those `TR` structures.
+This means that **any change in the database structure must be reflected in the PRT communication module** to ensure cross-version compatibility.
 
 <p align="center">
 	<img src="Images/prt_diagram_ano.png" width="600" />
 	<figcaption align="center">A diagram showing the PRT module converting TR structures received from and sent to clients using a different database version.</figcaption>
 </p>
 
-In the PRT module, one `TR` structure corresponds to one C++ file (along with its header), with the naming convention `prt_<object name>.cpp/h`. The first step to editing the communication module is to find the file corresponding to the database object that has been modified.
+In the PRT module, one `TR` structure corresponds to one C++ file (along with its header), with the naming convention `prt_<object name>.cpp/h`. The first step to editing the communication module is to find the file corresponding to the database object that has been modified. Then, add or edit that file to account for changes in the database structure.
 
+```mermaid
+flowchart LR
+    A[An object &#60object name&#62 was modified in the database structure] --> B[Find the corresponding PRT_&#60object name&#62.cpp and header files] --> C[Add or edit object declarations]
+```
 
 <!---___________________________________________________-->
 # Adding or editing communication module declarations
@@ -62,8 +65,9 @@ In each file, you will find a class called `Tr_<object name>` that represents a 
 
 Each class contains a function `registerFields` that determines which values from that object are transferred through the communication module.
 
-The `registerFields` function contains a list of registering calls, one for each field to register. It takes an `AtomStruct` as a parameter, which represents the basic structure of an object (no need to bother with where it is coming from). Then, the different fields from the object are registered inside the basic `AtomStruct` until the full structure is accounted for (all fields, unions, and nested structures).  
-Registering a field implies declaring in the communication module "this field exists or has existed inside this object in *some* database version" (you will see later how to define *which* version). To make changes to the communication module, you only need to edit or add calls to the register functions.
+The `registerFields` function contains a list of registering calls, one for each field to register for the object. It takes an `AtomStruct` as a parameter, which represents the basic structure of an object (no need to bother with where it is coming from). Then, the different fields from the object are registered inside the basic `AtomStruct` until the full structure is accounted for (all fields, unions, and nested structures) and matches the database object structure. Registering a field implies declaring in the communication module "this field exists or has existed inside this object in *some* database version" (you will see later how to define *which* version), which is why you might see registering calls for fields that no longer exist in the database object.
+
+To make changes to the communication module, you only need to edit or add calls to the register functions.
 
 <p align="center">
 	<img src="Images/prt_diagram_file.png" width="600" />
@@ -83,7 +87,7 @@ The available registering methods from the `AtomStruct` class are listed in the 
 To register a field, use the following syntax:
 
 ```
-<AtomStruct>.register(<name>, <PRT data type>, <position accessor>, <RegisterInfo>)
+<AtomStruct>.register(<name>, <PRT type descriptor>, <position accessor>, <RegisterInfo>)
 ```
 where `AtomStruct` is the (usually only) parameter of the `registerFields` function.
 
@@ -110,7 +114,7 @@ Position accessors specify where in the `TR` structure the value of the field wi
 
 Use the macro `FIELD_POSITION(<TR structure>, <field position in structure>)` to call position accessors.
 
-> :bulb: For example, use `FIELD_POSITION(TR_ATOM_TRANSFER, u.str.u.xtr.atom_name))` for the field `atom_name` inside nested unions `u.str.u.xtr` of the `TR_ATOM_TRANSFER` structure.
+> :bulb: For example, use `FIELD_POSITION(TR_ATOM_TRANSFER, u.str.u.xtr.atom_name)` for the field `atom_name` inside nested unions `u.str.u.xtr` of the `TR_ATOM_TRANSFER` structure.
 
 ### Fourth parameter : RegisterInfo
 This parameter is used to specify a transfer mask (optional) and versioning information (mandatory). Its basic form is simply `RegisterInfo()` and can be used as such.
@@ -152,12 +156,13 @@ atom.register("atom_name",
 <!---___________________________________________________-->
 
 # Compatibility management
-Clients might use an older version of AtomXStore that uses a previous communication module and database version. In addition to the versioning information, some adaptations must sometimes be made to account for the discrepancies between older and newer versions.
+Clients might use an older version of AtomXStore that uses a previous communication module and database version. In addition to the versioning information, some adaptations must sometimes be made to account for the discrepancies between older and newer versions, requiring more than the typical versioning mechanism.
 
 ### Setting a value aside
-Sometimes, when fields are removed from the communication module, the value of these fields from the incoming messages can still be needed (for instance, for upgrade purposes: the previous value is read, used to compute a new value, then discarded). In this case, use the `LOCAL_VAR(<class name>, <variable name>)` macro instead of the `FIELD_POSITION` macro for the position accessor parameter of the `register` function.
+Sometimes, when fields are removed from the communication module, the value of these fields from the incoming messages can still be needed (for instance, for upgrade purposes: the previous value is read, used to compute a new value, then discarded). In this case, use the `LOCAL_VAR(<class name>, <variable name>)` macro instead of the `FIELD_POSITION` macro for the position accessor parameter of the `register` function.  
+This puts the value received from the `TR` structure into the local variable `<variable name>`, which is a private member variable of this class. The `<class name>` in the macro is the name of the class representing the current object in the communication module (for example `Tr_stream`).
 
-The `<class name>` in the macro is the name of the class representing the current object in the communication module (for example `Tr_stream`). The `<variable name>` is a private variable of this class. If you need to set a value aside, declare this variable in the corresponding header and **do not forget to initialize it in the `Tr_<object name>` class constructor and free the allocated memory in the destructor if necessary**. This variable stores the value received from the `TR` structure, which can then be used in post-processing (see below).
+If you need to set a value aside, declare this local variable as a private class member in the corresponding header and **do not forget to initialize it in the `Tr_<object name>` class constructor and free the allocated memory in the destructor if necessary**. Once initialized with the received value, this variable can be used in post-processing (see below).
 
 ### Pre-processing and post-processing
 The `Tr_` classes can contain a `preProcessing` function to manage the `TR` structures that will be sent to a client, *before* actually sending them, and a `postProcessing` that manages incoming `TR` structures *before* forwarding them to the database. Contrary to what the names might suggest, both operations are done **after** registering the fields.
@@ -169,7 +174,7 @@ The `Tr_` classes can contain a `preProcessing` function to manage the `TR` stru
 
 The parameters of both `preProcessing` and `postProcessing` are:
 - A `TR` structure (the one that will be edited).
-- A `clientVersion` value identifying the version of the client.
+- A `clientVersion` identifying the version of the client.
 
 The first thing to do in pre/post-processing is to test the `clientVersion` value. Then you can make changes to the content of the current `TR` structure as necessary, according to the client version (this is where stored values can be useful).
 
@@ -181,10 +186,10 @@ Similarly, passwords received from older clients must be decrypted with the prev
 <!---___________________________________________________-->
 
 # Checking the validity of changes
-Once you have made changes in a PRT file, always check their validity. The first step is compiling the code on Linux : the communication module validity checker will make sure no changes have been inadvertently made to the history of previous communication module versions, ensuring cross-version compatibility was not broken.
+Once you have made changes in a PRT file, always check their validity. The first and easiest step is compiling the code on Linux : the communication module validity checker will make sure no changes have been inadvertently made to the history of previous communication module versions, ensuring cross-version compatibility was not broken.
 
-Then, on whichever operating system you used for compilation, copy the `Build/.../Bin/prt_generate` binary into your `AtomXStore/Bin/` directory. Run it with the `-version <version>` option to generate an XML file describing a specific communication module version. After this:
-* Generate the previous communication module version and check that it is identical to the one archived in the AtomXStore sources (in `Sources/PRT/Protocol/`). This will also ensure that you did not change the history of communication module versions (though this should be caught earlier by the validity checker on Linux).
+Then, on whichever operating system you used for compilation, copy the `Build/.../Bin/prt_generate` binary into your `AtomXStore/Bin/` directory. Run it with the `-version <version>` option to generate an XML file describing a specific communication module version. Then:
+* Generate the XML file for the previous version and check that it is identical to the one archived in the AtomXStore sources (in `Sources/PRT/Versions/`). This will also ensure that you did not change the history of communication module versions (though this should be caught earlier by the validity checker on Linux).
 * Generate the current version with `-version <current version>` and compare it to the previous version to review your changes.
 
 If possible, always test your changes by having the server communicate with clients in the relevant versions in a testing environment.
