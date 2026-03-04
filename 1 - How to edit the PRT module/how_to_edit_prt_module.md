@@ -60,7 +60,7 @@ In the PRT module, one `TR` structure corresponds to one C++ file (along with it
 ### Structure of the PRT module files
 In each file, you will find a class called `Tr_<object name>` that represents a specific object from the `PAtoms` database: you must find the one corresponding to the object you want to edit.
 
-Each class contains a function `registerFields` that determines which values from that object are transfered through the communication module.
+Each class contains a function `registerFields` that determines which values from that object are transferred through the communication module.
 
 The `registerFields` function contains a list of registering calls, one for each field to register. It takes an `AtomStruct` as a parameter, which represents the basic structure of an object (no need to bother with where it is coming from). Then, the different fields from the object are registered inside the basic `AtomStruct` until the full structure is accounted for (all fields, unions, and nested structures).  
 Registering a field implies declaring in the communication module "this field exists or has existed inside this object in *some* database version" (you will see later how to define *which* version). To make changes to the communication module, you only need to edit or add calls to the register functions.
