@@ -56,7 +56,7 @@ Our team validated the system in two stages. First, through numerical validation
 We then carried out experimental validation. We set up real experiments using a real medical accelerator (which produces the radiation) and water tanks (which simulate human tissue) to compare our software’s predictions with actual physical measurements.
 
 <p align="center">
-	<img src="Images/uncertainty.png" width="400" />
+	<img src="Images/uncertainty.jpg" width="400" />
 	<img src="Images/cuve.jpg" width="350" />
 	<figcaption align="center">A graph showing the uncertainty on the dose result for a simulation of a radiation beam in a water tank (second image). The uncertainty increases rapidly with the distance because fewer particles reach these regions. Inside the region of interest (the sphere on the right), the result is extremely precise and the uncertainty is close to 0%.</figcaption>
 </p>
