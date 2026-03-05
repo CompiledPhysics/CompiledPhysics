@@ -31,38 +31,7 @@ This started as a collection of notes I wrote about the maintenance process of (
 		- [4.3.5 Checking running services with ps](#435-Checking-running-services-with-ps)
 		- [4.3.6 Displaying environment variables with env](#436-Displaying-environment-variables-with-env)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-- general workflow diagram / summary
-- finir relecture
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 1. Maintenance workflow
-
 When Customer Support encounters or suspects a bug in AtomXStore, they will create a *Support Request* Jira ticket. The person in charge of dispatch will then assign the issue to the relevant developer depending on the type of issue (client/server/UI side).
 
 The first step when troubleshooting an issue reported by Customer Support is to check whether the problem is already known:
