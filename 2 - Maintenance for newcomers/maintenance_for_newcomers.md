@@ -23,7 +23,7 @@ This started as a collection of notes I wrote about the maintenance process of (
 		- [4.1.3 Heaptrack](#413-Heaptrack)
 		- [4.1.4 Debug integration in VSCode](#414-Debug-integration-in-VSCode)
 	- [4.2 AtomXStore logStop mechanism](#42-AtomXStore-logStop-mechanism)
-	- [4.3 Use cases for simple Linux commands](#43-Use-cases-for-simple-Linux-commands)
+	- [4.3 Useful Linux commands](#43-Useful-Linux-commands)
 		- [4.3.1 Checking the current call stack of a process with pstack](#431-Checking-the-current-call-stack-of-a-process-with-pstack)
 		- [4.3.2 Displaying the mapped memory with pmap](#432-Displaying-the-mapped-memory-with-pmap)
 		- [4.3.3 Checking files and database integrity with md5sum](#433-Checking-files-and-database-integrity-with-md5sum)
@@ -34,13 +34,40 @@ This started as a collection of notes I wrote about the maintenance process of (
 
 
 
+
+
+
+
+
+
+
+
+
+
+- general workflow diagram / summary
+- finir relecture
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # 1. Maintenance workflow
 
-When Customer Support encounters or suspects a bug in AtomXStore, they will create a "Support Request" Jira ticket. The person in charge of dispatch will then assign the issue to the relevant developer depending on the type of issue (client/server side).
+When Customer Support encounters or suspects a bug in AtomXStore, they will create a *Support Request* Jira ticket. The person in charge of dispatch will then assign the issue to the relevant developer depending on the type of issue (client/server/UI side).
 
 The first step when troubleshooting an issue reported by Customer Support is to check whether the problem is already known:
 - Search Jira for similar entries using keywords specific to your case (you might find the issue has already been fixed and is waiting to be patched).
-- Search the AtomXStore Knowledge Base at knowledgebase.atomxstore.com/AtomXStore_KB/Login.php to find similar issues (also useful to find potential workarounds).
+- Search the AtomXStore Knowledge Base at knowledgebase.atomxstore.com/KB/Login.php to find similar issues (also useful to find potential workarounds).
 
 If the issue is actually new, make sure that it is a real bug and not simply a configuration error that Customer Support might have overlooked. This mostly comes with experience, but some errors in the logs are a clear indicator (for example functions returning `ERR_CONFIGURATION`).
 
@@ -48,7 +75,7 @@ Then, you can go on to find and fix the root of the issue. After that, the usual
 1. Create a "Bug" type Jira ticket and link it to the Customer Support issue.
 2. Reproduce the issue with clear, repeatable steps and write them down in the "Testing" section to help QA.
 3. When the fix is ready, create a fix branch using the new Jira ticket name.
-4. Test the fix by using the same steps you reproduced the issue with.
+4. Test the fix by using the same method you reproduced the issue with.
 5. Request to merge the fix branch into the master branch.
 6. After the review is done, update the ticket to "In QA" status.
 7. Update Customer Support to let them know a fix is coming (inform them as soon as possible of any workaround).
@@ -69,7 +96,7 @@ Finding the cause of the issue is usually the hardest and most time-consuming pa
 
 The main source of data you can get from Customer Support is the report from the Environment Diagnostic Tool (EDT). This is an executable file that runs on the client's server and creates a directory containing all the possibly relevant information from the system: AtomXStore install directory, logs, configuration files, general system specs... It contains a huge amount of information, which is why it is essential to know what to look for.
 
-The EDT report for a specific case can be found at `reports.atomxstore.com:/data/support/EDT/<case number>`. Inside this directory, the most useful information you will find is:
+The EDT report for any specific case can be found at `reports.atomxstore.com:/data/support/EDT/<case number>`. Inside this directory, the most useful information you will find is:
 - The AtomXStore install directory `AtomXStore_install` that mostly contains AtomXStore logs.
 - The AtomXStore configuration directory `AtomXStore_conf` that contains:
 	- The client's AtomXStore parameters file `AtomXStore_parameters.xml`.
@@ -86,11 +113,11 @@ This is just a small part of all the available files, so do not hesitate to sear
 
 ## 2.2 Logs analysis
 
-The AtomXStore logs are the main tool for analysis and debugging. They are always constructed the same way:  
-`<PID>|<date>|<binary>|<log ID>|<function name>|<log text>|<server name>|<job id>|`
+The AtomXStore logs are the main source of information for analysis and debugging. They are always constructed the same way:  
+**`<PID> | <date> | <binary> | <log ID> | <function name> | <log text> | <server name> | <job id> |`**
 - `PID` is the PID of the process that recorded that log.
 - `date` is the exact time of the log, in Epoch format.
-- `binary` is the name of the binary (for example atomxstore_launcher or atomxstore_daemon).
+- `binary` is the name of the binary that recorded the log (for example atomxstore_launcher or atomxstore_daemon).
 - `log ID` is the ID of the log inside the function `function name` that produced the log.
 - `log text` is the full text of the log.
 - `server_name` is the name of the server the process is running on.
@@ -100,13 +127,18 @@ Logs are written sequentially, but be careful: errors are escalated from the bot
 
 Reading logs can be difficult, especially when files are millions of lines long. To help with this, a tool to convert logs into XLS files is available at `AtomXStorestorage.atom.dev/storage/tools/log_converter.py`. Running this tool with the parameter `-file <log file>` outputs a more readable file with fully converted Epoch dates that can then easily be searched or filtered (by server or job for example). In case the log file is too big, the tool will output multiple XLS files.
 
-Customer Support will usually point you towards specific errors in the logs that they (or the clients) think are related to the issue at hand. Those logs are not necessarily linked to the reason of the issue, so always look for errors outside of this scope. 
+Customer Support will usually point you towards specific errors in the logs that they (or the clients) think are related to the issue at hand. Those logs are not necessarily linked to the root cause of the issue, so always look for errors outside of this scope. 
 
-If you suspect the issue is coming from a specific module and current logs are not enough to find the root cause, you can request Customer Support to add debug parameters for that module. They will ask the client to edit their configuration files, activating more debug logs that would otherwise be hidden. The full list of debug parameters is found in the AtomXStore sources at `Sources/conf/parameters_list.xml`.
+If you suspect the issue is coming from a specific module and current logs are not enough to find out what happens, you can request Customer Support to add debug parameters for that module. They will ask the client to edit their configuration files, activating more debug logs that would otherwise be hidden. The full list of debug parameters is found in the AtomXStore sources at `Sources/conf/parameters_list.xml`.
 
 ## 2.3 Code analysis
 
 Log files can inform you about the errors that were thrown as well as the exact order of functions calls in the stack. With that information, you can search the AtomXStore codebase to find exactly where these logs are coming from. Make sure the code version is the exact same as the client's binaries by checking the `version.txt` file in their EDT report.
+
+```mermaid
+flowchart LR
+    A[Checkout the correct version of the code] --> B[Find the function that recorded the log] --> C[Find the log with the correct ID] --> D[Make sure the text matches: the log in indeed the right one]
+```
 
 Your knowledge of the codebase is what will allow you to understand what exactly happened and how to fix it. To help with this however, don't forget to ask more experienced developers.
 
@@ -116,27 +148,47 @@ Another possibility that is currently being experimented is the use of Cursor AI
 
 ## 2.4 Database analysis
 
-Alongside logs, it is sometimes necessary to have direct access to the client's database. If clients agree to send it to Customer Support, the compressed database will be available at `/data.atomxstore.dev/support_storage/db/<case ID>`. You can then copy it into your AtomXStore home directory. After decompressing the database with the `atom_restore -file <database file>` command, you have two options:
+Alongside logs, it is sometimes necessary to have direct access to the client's database. If the client agrees to send it to Customer Support, the compressed database will be available at `/data.atomxstore.dev/support_storage/db/<case ID>`. You can then copy it into your AtomXStore home directory. After decompressing the database with the `atom_restore -file <database file>` command, you have two options:
 - Use the `atom_debug -database <database name>` command to interactively browse the database.
 - Decode the database to plain text files with the `atom_decode -file <database file>` command (not recommended, but sometimes necessary).
 
 Usage of the `atom_debug` binary is the subject of a complete guide on Confluence under the "Developer Tools" category. In short, it allows browsing the database objets in a similar way to a filesystem and gives a large number of tools for displaying, editing and fixing database objects.
 
-The size of a decompressed database can be as much as 10 times the compressed size, so make sure your environment has enough available space. Most of the time however, the database includes a large part of empty space which acts as a buffer to prevent performing too many expanding operations. This means the actual size of the database might be much less than it seems (the only way to know is by asking Customer Support). In that case, add the parameter `ignore_db_size=true` in your configuration file to cause the `atom_restore` command to ignore the database size restrictions.
+> :warning: The size of a decompressed database can be as much as 10 times the compressed size, so make sure your environment has enough available space. Most of the time however, the database includes a large part of empty space which acts as a buffer to prevent performing too many expanding operations. This means the actual size of the database might be much less than it seems (the only way to know is by asking Customer Support). In that case, add the parameter `ignore_db_size=true` in your configuration file to cause the `atom_restore` command to ignore the database size restrictions.
 
 ---
 
 # 3. Checking the code history
 
-The Git version control is an invaluable tool to find the cause of issues encountered by clients. Many times, the issue appears right after an update to a newer version (check `versions.txt` in the EDT report to see the update history). In that case, checking the Git history to find changes from the previous version can limit your search to code added in a shorter period of time.
+The Git version control is an invaluable tool to find the cause of issues encountered by clients. Many times, the issue appears soon after an update to a newer version (check `versions.txt` in the EDT report to see the update history). In that case, checking the Git history to find changes from the previous version can limit your search to code added in a shorter period of time.
 
 If you don't exactly know when the issue started to appear but are able to (quickly) reproduce it, performing a dichotomy might help pinpoint the defective commit. To do this, first checkout an older commit that you think works properly. Then test it: if the issue is already there, checkout an older commit and test it again. Do this until you find one that works: that's your starting point. From this first commit:
-1. Checkout the commit in the middle of your starting point and the most recent one.
+1. Checkout the midpoint of your starting point and the most recent one.
 2. Test it:
 	- If it works, this is your new starting point (the issue appeared later).
 	- If not, the issue appeared between this commit and your current starting point. Checkout the commit at the middle of both: this is your new starting point.
 3. Go back to 1. with your new starting point.
-Repeat this until you can pinpoint exactly which commit causes the error, which will limit the scope of your search. Usually, after repeating this process a few times, you will end up with a limited number of commits among which only a few are relevant to the issue. You can then manually exclude some of them and keep only one or two for analysis, speeding up the process.
+Repeat this until you can pinpoint exactly which commit causes the error, which will limit the scope of your search. This is summarized in the diagram below:
+
+
+```mermaid
+flowchart TD
+
+    D([Start]) --> G[START = good commit <br> END = latest commit]
+
+    G --> H[Checkout midpoint]
+    H --> I{Issue present?}
+
+    I -- No --> J[START = midpoint]
+    I -- Yes --> K[END = midpoint]
+
+    J --> L{Commits left?}
+    K --> L
+
+    L -- Yes --> H
+    L -- No --> M([END is bad commit])
+```
+Usually, after repeating this process a few times, you will end up with a limited number of commits among which only a few are relevant to the issue. You can then manually exclude some of them and keep only one or two for analysis, speeding up the process.
 
 ---
 
@@ -167,17 +219,22 @@ The AtomXStore code include a special mechanism called "logStop" for debugging u
 <parameter name="logStop_functionID"><value> id </value> </parameter>
 <parameter name="logStop_effect"><value>  effect  </value> </parameter>
 ```
-Those parameters allow identifying the correct log call and describe what should be done when reaching a valid log:
-- `function` is the name of the function in which the targeted log call is located.
+
+Those parameters allow identifying specific log calls that will trigger the logStop mechanism, and describe what should be done when reaching one of those log calls.
+
+- `function` is the name of the function in which the targeted log calls are located.
 - `id` is the identifier of the log call inside that function (if multiple log calls have the same identifier in the same function, they will all successively trigger the logStop mechanism).
 - `effect` describes what the logStop system should do when reaching a targeted log call. Options are:
-	- `pause` pauses the process until a "kill" command is issued (this will instead resume the process).
-	- `stop` completely shuts down the process, and escalates an error code through the stack.
-	- `stack` dumps the current stack in the logs.
 
-## 4.3 Use cases for simple Linux commands
+|Option|Effect|
+|:----:|----|
+|`pause`|Pauses the process until a "kill" command is issued (this will instead resume the process).|
+|`stop`|Completely shuts down the process, and escalates an error code through the stack.|
+|`stack`|Dumps the current stack in the logs.|
 
-This section lists a number of simple commands that are especially useful for debugging AtomXStore issues. Each one is associated to a typical use case. Again, this is just a tiny fraction of what is available, so feel free to experiment, research or use what you already know to expand this list!
+
+## 4.3 Useful Linux commands
+This section lists a number of simple commands that are especially useful for debugging AtomXStore issues. Each one is associated, if possible, to a typical use case. Again, this is just a tiny fraction of what is available, so feel free to experiment, research or use what you already know to expand this list.
 
 ### 4.3.1 Checking the current call stack of a process with pstack
 `pstack` displays the current call of a running process. This is invaluable in cases where you suspect a deadlock issue, to check which processes are trying to take a lock. In cases where a process is running slow, you can loop the command as a quick profiling tool, to check which call appears more often and might be slowing things down.
@@ -191,7 +248,7 @@ The command `pmap <PID>` displays a memory map of a running process. Although ca
 ### 4.3.4 Checking listening ports with netstat
 The `netstat` command displays active connections and listening ports, along with the processes using them.
 The following options are especially useful for troubleshooting networking issues between AtomXStore client and server:
-- `-n` (numeric) display IP addresses instead of resolving hostnames and port numbers instead of service names.
+- `-n` (numeric) display IP addresses instead of resolving hostnames, and port numbers instead of service names.
 - `-a` (all) display all connections, active and inactive ones.
 - `-p` (process) display the PID of processes.
 
