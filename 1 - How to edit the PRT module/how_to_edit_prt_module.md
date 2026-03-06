@@ -45,10 +45,12 @@ If you're already familiar with this module, use the following list as a quick r
 The `PAtoms` database contains `TR` structures that represent all of the AtomXStore objects. The PRT module is responsible for the way client and server communicate by exchanging those `TR` structures.
 This means that **any change in the database structure must be reflected in the PRT communication module** to ensure cross-version compatibility.
 
-<p align="center">
-	<img src="Images/prt_diagram_ano.png" width="600" />
-	<figcaption align="center">A diagram showing the PRT module converting TR structures received from and sent to clients using a different database version.</figcaption>
-</p>
+<figure align="center">
+  <img src="Images/prt_diagram_ano.png" width="600">
+  <figcaption>
+    A diagram showing the PRT module converting TR structures received from and sent to clients using a different database version.
+  </figcaption>
+</figure>
 
 In the PRT module, one `TR` structure corresponds to one C++ file (along with its header), with the naming convention `prt_<object name>.cpp/h`. The first step to editing the communication module is to find the file corresponding to the database object that has been modified. Then, add or edit that file to account for changes in the database structure.
 
@@ -69,10 +71,10 @@ The `registerFields` function contains a list of registering calls, one for each
 
 To make changes to the communication module, you only need to edit or add calls to the register functions.
 
-<p align="center">
+<figure align="center">
 	<img src="Images/prt_diagram_file.png" width="600" />
 	<figcaption align="center">A diagram of the PRT module and a typical PRT module C++ file.</figcaption>
-</p>
+</figure>
 
 The available registering methods from the `AtomStruct` class are listed in the following table:
 |Method|What it's used for|
@@ -167,10 +169,10 @@ If you need to set a value aside, declare this local variable as a private class
 ### Pre-processing and post-processing
 The `Tr_` classes can contain a `preProcessing` function to manage the `TR` structures that will be sent to a client, *before* actually sending them, and a `postProcessing` that manages incoming `TR` structures *before* forwarding them to the database. Contrary to what the names might suggest, both operations are done **after** registering the fields.
 
-<p align="center">
+<figure align="center">
 	<img src="Images/prepostprocessing.png" width="600" />
 	<figcaption align="center">A diagram showing the order of pre and post-processing operations on a TR structure.</figcaption>
-</p>
+</figure>
 
 The parameters of both `preProcessing` and `postProcessing` are:
 - A `TR` structure (the one that will be edited).
