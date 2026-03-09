@@ -11,7 +11,7 @@ I added the full manuscript to the repository as a technical reference.
 # Accelerating Medical Physics
 
 ## Introduction: the hidden side of radiotherapy
-Radiotherapy is currently one of the pillars of cancer treatment. It uses high-energy radiation to destroy tumors while sparing healthy tissue. Although it has become extremely precise at targeting cancer cells, the laws of physics make it impossible to completely eliminate side effects.
+Radiotherapy is currently one of the pillars of cancer treatment. It uses a medical accelerator that generates high-energy radiation to destroy tumors while sparing healthy tissue. Although it has become extremely precise at targeting cancer cells, the laws of physics make it impossible to completely eliminate side effects.
 Indeed, when radiation hits a patient, it does not stop at the tumor but instead spreads out. This creates what is called the peripheral dose: small amounts of radiation that reach healthy organs, sometimes far from the treated area.  
 Although these doses are low, they are not without risk. It has been shown that this stray radiation is a likely cause of secondary cancers, appearing years or even decades after treatment. Current clinical tools are very good at calculating the dose inside the beam, but often ignore the peripheral dose because it is extremely demanding in terms of computing resources.
 <p align="center">
