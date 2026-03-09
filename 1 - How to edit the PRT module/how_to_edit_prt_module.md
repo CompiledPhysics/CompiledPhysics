@@ -17,10 +17,10 @@ This guide assumes basic knowledge of C structures and of our database structure
 - [Adding or editing communication module declarations](#Adding-or-editing-communication-module-declarations)
 	- [Structure of the PRT module files](#Structure-of-the-PRT-module-files)
 	- [Basic syntax for registering a field](#Basic-syntax-for-registering-a-field)
-	- [First parameter : name](#First-parameter-name)
-	- [Second parameter : PRT type descriptor](#-Second-parameter-PRT-type-descriptor)
-	- [Third parameter : position accessor](#-Third-parameter-position-accessor)
-	- [Fourth parameter : RegisterInfo](#Fourth-parameter-RegisterInfo)
+		- [First parameter : name](#First-parameter-name)
+		- [Second parameter : PRT type descriptor](#-Second-parameter-PRT-type-descriptor)
+		- [Third parameter : position accessor](#-Third-parameter-position-accessor)
+		- [Fourth parameter : RegisterInfo](#Fourth-parameter-RegisterInfo)
 	- [Complete declaration sample](#Complete-declaration-sample)
 - [Compatibility management](#Compatibility-management)
 	- [Setting a value aside](#Setting-a-value-aside)
@@ -60,7 +60,7 @@ flowchart LR
 <!---___________________________________________________-->
 # Adding or editing communication module declarations
 
-### Structure of the PRT module files
+## Structure of the PRT module files
 In each file, you will find a class called `Tr_<object name>` that represents a specific object from the `PAtoms` database: you must find the one corresponding to the object you want to edit.
 
 Each class contains a function `registerFields` that determines which values from that object are transferred through the communication module.
@@ -83,7 +83,7 @@ The available registering methods from the `AtomStruct` class are listed in the 
 |registerStruct|Other structure|
 
 
-### Basic syntax for registering a field
+## Basic syntax for registering a field
 To register a field, use the following syntax:
 
 ```
@@ -136,7 +136,7 @@ The communication module versions are values defined in `prt_versions.h`. To add
 
 Both transfer mask and versioning information can be combined, such as `RegisterInfo().mask(transfer_mask, TRANSFER_MASK_NAME).added(PRT_VERSION_8_1)`, and multiple versioning calls can coexist to account for the full history of a specific field.
 
-### Complete declaration sample
+## Complete declaration sample
 A complete declaration for a single field of an object might look like this:  
 ```
 // Sample: register the atom_name field of the TR_ATOM_TRANSFER structure
@@ -158,13 +158,13 @@ atom.register("atom_name",
 # Compatibility management
 Clients might use an older version of AtomXStore that uses a previous communication module and database version. In addition to the versioning information, some adaptations must sometimes be made to account for the discrepancies between older and newer versions, requiring more than the typical versioning mechanism.
 
-### Setting a value aside
+## Setting a value aside
 Sometimes, when fields are removed from the communication module, the value of these fields from the incoming messages can still be needed (for instance, for upgrade purposes: the previous value is read, used to compute a new value, then discarded). In this case, use the `LOCAL_VAR(<class name>, <variable name>)` macro instead of the `FIELD_POSITION` macro for the position accessor parameter of the `register` function.  
 This puts the value received from the `TR` structure into the local variable `<variable name>`, which is a private member variable of this class. The `<class name>` in the macro is the name of the class representing the current object in the communication module (for example `Tr_stream`).
 
 If you need to set a value aside, declare this local variable as a private class member in the corresponding header and **do not forget to initialize it in the `Tr_<object name>` class constructor and free the allocated memory in the destructor if necessary**. Once initialized with the received value, this variable can be used in post-processing (see below).
 
-### Pre-processing and post-processing
+## Pre-processing and post-processing
 The `Tr_` classes can contain a `preProcessing` function to manage the `TR` structures that will be sent to a client, *before* actually sending them, and a `postProcessing` that manages incoming `TR` structures *before* forwarding them to the database. Contrary to what the names might suggest, both operations are done **after** registering the fields.
 
 <p align="center">
