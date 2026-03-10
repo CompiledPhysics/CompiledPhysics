@@ -1,13 +1,13 @@
+> :uk: **About this sample**  
+This document is a reference for classes created for this portfolio, based on my PhD research work, and intended to be used to perform a Monte Carlo simulation in radiotherapy.
+The header files are available in the `Headers` folder and contain their own [documentation in Doxygen format](https://compiledphysics.github.io/CompiledPhysics/).
+
 
 > :fr: **À propos de cet exemple**  
 Ce document est une référence pour des classes fictives créées pour ce portfolio, basées sur mon travail de thèse, et conçues pour être utilisées pour réaliser une simulation Monte Carlo en radiothérapie.
 Les headers sont disponibles dans le dossier `Headers` et contiennent leur propre [documentation au format Doxygen](https://compiledphysics.github.io/CompiledPhysics/).
 
 
-
-> :uk: **About this sample**  
-This document is a reference for classes created for this portfolio, based on my PhD research work, and intended to be used to perform a Monte Carlo simulation in radiotherapy.
-The header files are available in the `Headers` folder and contain their own [documentation in Doxygen format](https://compiledphysics.github.io/CompiledPhysics/).
 
 
 # **Summary:** 

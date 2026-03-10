@@ -1,10 +1,12 @@
+> :uk: **About this sample**  
+This is a short summary of my PhD work made specifically for this portfolio. It is supposed to be targeting a general audience with no prior physics knowledge.
+I added the full manuscript to the repository as a technical reference.
+
+
 > :fr: **À propos de cet exemple**  
 Ceci est un court résumé de mon travail de thèse préparé spécialement pour ce portfolio. Il est destiné à un public général sans connaissances préalables en physique.
 J'ai ajouté le manuscrit complet au dépôt comme référence technique.
 
-> :uk: **About this sample**  
-This is a short summary of my PhD work made specifically for this portfolio. It is supposed to be targeting a general audience with no prior physics knowledge.
-I added the full manuscript to the repository as a technical reference.
 
 ---
 

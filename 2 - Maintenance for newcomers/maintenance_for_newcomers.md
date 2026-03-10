@@ -1,10 +1,12 @@
+> :uk: **About this sample**  
+This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other, newer developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
+**To avoid any potential issue with confidentiality, I changed the names of all Atempo-owned assets.**
+
+
 > :fr: **À propos de cet exemple**  
 Ce document est construit à partir d'une collection de notes que j'ai écrites sur le processus de maintenance du code legacy : quel est le processus à suivre, quels outils sont à notre disposition, comment analyser les données récupérées par le support auprès des clients... J'ai ensuite organisé les notes dans ce document afin qu'il puisse aider d'autres développeurs, moins expérimentés, dans leur propre processus de maintenance. Ce guide suppose une certaine familiarité avec notre base de code et nos outils.  
 **Pour éviter tout problème de confidentialité, j'ai changé les noms de tous les éléments appartenant à Atempo.**
 
-> :uk: **About this sample**  
-This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other, newer developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
-**To avoid any potential issue with confidentiality, I changed the names of all Atempo-owned assets.**
 
 ---
 
