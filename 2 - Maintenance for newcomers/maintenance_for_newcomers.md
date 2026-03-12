@@ -1,5 +1,5 @@
 > :uk: **About this sample**  
-This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other, newer developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
+This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other, new developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
 **To avoid any potential issue with confidentiality, I changed the names of all Atempo-owned assets.**
 
 
@@ -214,7 +214,7 @@ This section lists a number of simple commands that are especially useful for de
 The command `pmap <PID>` displays a memory map of a running process. Although cases are rare, this can be useful to understand issues related to the memory mapping of the database (for example cases where too much memory is mapped).
 
 ### 4.3.3 Checking files and database integrity with md5sum
-`md5sum <file path>` creates a MD5 hash of a file. Use this to check the integrity of high-volume files after a network transfer. In the Customer Support's repository of client data, each database is associated to a MD5 hash in a text file. By comparing the hash with the one you generated locally, you can make sure the database is still valid after a transfer.
+`md5sum <file path>` creates an MD5 hash of a file. Use this to check the integrity of high-volume files after a network transfer. In the Customer Support's repository of client data, each database is associated with an MD5 hash in a text file. By comparing the hash with the one you generated locally, you can make sure the database is still valid after a transfer.
 
 ### 4.3.4 Checking listening ports with netstat
 The `netstat` command displays active connections and listening ports, along with the processes using them.
