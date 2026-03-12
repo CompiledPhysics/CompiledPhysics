@@ -1,6 +1,6 @@
 > [!IMPORTANT]
 > :uk: **About this sample**  
-This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other, new developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
+This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other and especially new developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
 **To avoid any potential issue with confidentiality, I changed the names of all Atempo-owned assets.**
 
 > [!IMPORTANT]
@@ -16,6 +16,7 @@ Ce document est construit à partir d'une collection de notes que j'ai écrites 
 - [2. Analysis of available data](#2-Analysis-of-available-data)
 	- [2.1 Environment Diagnostic Tool report analysis](#21-Environment-Diagnostic-Tool-report-analysis)
 	- [2.2 Logs analysis](#22-Logs-analysis)
+		- [2.2.1 Additional debug logs](#221-Additional-debug-logs)
 	- [2.3 Code analysis](#23-Code-analysis)
 	- [2.4 Database analysis](#24-Database-analysis)
 - [3. Checking the code history](#3-Checking-the-code-history)
@@ -35,7 +36,7 @@ Ce document est construit à partir d'une collection de notes que j'ai écrites 
 		- [4.3.6 Displaying environment variables with env](#436-Displaying-environment-variables-with-env)
 
 # 1. Maintenance workflow
-When Customer Support encounters or suspects a bug in AtomXStore, they will create a *Support Request* Jira ticket. The person in charge of dispatch will then assign the issue to the relevant developer depending on the type of issue (client/server/UI side).
+When Customer Support encounters or suspects a bug in AtomXStore, they create a *Support Request* Jira ticket. The person in charge of dispatch will then assign the issue to the relevant developer depending on the type of issue (client/server/UI side).
 
 The first step when troubleshooting an issue reported by Customer Support is to check whether the problem is already known:
 - Search Jira for similar entries using keywords specific to your case (you might find the issue has already been fixed and is waiting to be patched).
@@ -43,30 +44,27 @@ The first step when troubleshooting an issue reported by Customer Support is to 
 
 If the issue is actually new, make sure that it is a real bug and not simply a configuration error that Customer Support might have overlooked. This mostly comes with experience, but some errors in the logs are a clear indicator (for example functions returning `ERR_CONFIGURATION`).
 
-Then, you can go on to find and fix the root of the issue. After that, the usual process is:
+Finally, if the issue seems to be an actual bug that needs fixing, the usual process is the following:
 1. Create a "Bug" type Jira ticket and link it to the Customer Support issue.
 2. Reproduce the issue with clear, repeatable steps and write them down in the "Testing" section to help QA.
-3. When the fix is ready, create a fix branch using the new Jira ticket name.
-4. Test the fix by using the same method you reproduced the issue with.
-5. Request to merge the fix branch into the master branch.
-6. After the review is done, update the ticket to "In QA" status.
-7. Update Customer Support to let them know a fix is coming (inform them as soon as possible of any workaround).
-8. Keep an eye on your email: the DevOps team might request that you report the fix into an older version.
+3. Create a fix branch using the new Jira ticket name (`fix/...`).
+4. Find the root cause of the issue and fix it in your new branch.
+5. Test the fix by using the same method you reproduced the issue with.
+6. Request to merge the fix branch into the master branch.
+7. After the review is done, update the ticket to "In QA" status.
+8. Update Customer Support to let them know a fix is coming (inform them as soon as possible of any workaround).
+9. Keep an eye on your email: the DevOps team might request that you report the fix into an older version.
 
-Finding the cause of the issue is usually the hardest and most time-consuming part. The rest of this document will help you do this in a more efficient way by introducing options to:
+As finding the root cause of an issue usually the hardest and most time-consuming part, the rest of this document will focus on helping you do it in a more efficient way by introducing options to:
 - Analyze the logs and data retrieved by Customer Support
 - Analyze the client's database (when available)
 - Analyze the source code and its history
 - Debug the AtomXStore binaries
 
-
----
-
-
 # 2. Analysis of available data
 ## 2.1 Environment Diagnostic Tool report analysis
 
-The main source of data you can get from Customer Support is the report from the Environment Diagnostic Tool (EDT). This is an executable file that runs on the client's server and creates a directory containing all the possibly relevant information from the system: AtomXStore install directory, logs, configuration files, general system specs... It contains a huge amount of information, which is why it is essential to know what to look for.
+The main source of data you can get from Customer Support is the report from the Environment Diagnostic Tool (EDT). The EDT is an executable file that runs on the client's server and creates a directory containing all the possibly relevant information from the system: AtomXStore install directory, logs, configuration files, general system specs... It contains a huge amount of information, which is why it is essential to know what to look for.
 
 The EDT report for any specific case can be found at `reports.atomxstore.com:/data/support/EDT/<case number>`. Inside this directory, the most useful information you will find is:
 - The AtomXStore install directory `AtomXStore_install` that mostly contains AtomXStore logs.
@@ -87,7 +85,7 @@ This is just a small part of all the available files, so do not hesitate to sear
 
 The AtomXStore logs are the main source of information for analysis and debugging. They are always constructed the same way:  
 **`<PID> | <date> | <binary> | <log ID> | <function name> | <log text> | <server name> | <job id> |`**
-- `PID` is the PID of the process that recorded that log.
+- `PID` is the PID of the process that recorded the log.
 - `date` is the exact time of the log, in Epoch format.
 - `binary` is the name of the binary that recorded the log (for example atomxstore_launcher or atomxstore_daemon).
 - `log ID` is the ID of the log inside the function `function name` that produced the log.
@@ -95,22 +93,22 @@ The AtomXStore logs are the main source of information for analysis and debuggin
 - `server_name` is the name of the server the process is running on.
 - `job id` is, when available, the identifier of the current job.
 
-Logs are written sequentially, but be careful: errors are escalated from the bottom-level functions to the top of the stack, which means in this case logs are added from the deepest calls to the most high-level ones, which can be counter-intuitive.
+> [!WARNING]
+> Logs are written sequentially, but be careful: errors are escalated from the bottom-level functions to the top of the stack, which means in this case logs are added from the deepest calls to the most high-level ones, which can be counter-intuitive.
 
 Reading logs can be difficult, especially when files are millions of lines long. To help with this, a tool to convert logs into XLS files is available at `AtomXStorestorage.atom.dev/storage/tools/log_converter.py`. Running this tool with the parameter `-file <log file>` outputs a more readable file with fully converted Epoch dates that can then easily be searched or filtered (by server or job for example). In case the log file is too big, the tool will output multiple XLS files.
 
 Customer Support will usually point you towards specific errors in the logs that they (or the clients) think are related to the issue at hand. Those logs are not necessarily linked to the root cause of the issue, so always look for errors outside of this scope. 
 
-If you suspect the issue is coming from a specific module and current logs are not enough to find out what happens, you can request Customer Support to add debug parameters for that module. They will ask the client to edit their configuration files, activating more debug logs that would otherwise be hidden. The full list of debug parameters is found in the AtomXStore sources at `Sources/conf/parameters_list.xml`.
+### 2.2.1 Additional debug logs
+If you suspect the issue is coming from a specific module and current logs are not enough to find out what happens, you can request Customer Support to add debug parameters for that module. They will ask the client to edit their configuration files, revealing more debug logs that would otherwise be hidden. The full list of debug parameters is found in the AtomXStore sources at `Sources/conf/parameters_list.xml`.
 
 ## 2.3 Code analysis
 
-Log files can inform you about the errors that were thrown as well as the exact order of functions calls in the stack. With that information, you can search the AtomXStore codebase to find exactly where these logs are coming from. Make sure the code version is the exact same as the client's binaries by checking the `version.txt` file in their EDT report.
+Log files can inform you about the errors that were thrown as well as the exact order of functions calls in the stack. With that information, you can search the AtomXStore codebase to find exactly where these logs are coming from. 
 
-```mermaid
-flowchart LR
-    A[Checkout the correct version of the code] --> B[Find the function that recorded the log] --> C[Find the log with the correct ID] --> D[Make sure the text matches: the log in indeed the right one]
-```
+> [!WARNING]
+> Always make sure the code version is the exact same as the client's binaries by checking the `version.txt` file in their EDT report.
 
 Your knowledge of the codebase is what will allow you to understand what exactly happened and how to fix it. To help with this however, don't forget to ask more experienced developers.
 
@@ -125,7 +123,7 @@ Alongside logs, it is sometimes necessary to have direct access to the client's 
 - Use the `atom_debug -database <database name>` command to interactively browse the database.
 - Decode the database to plain text files with the `atom_decode -file <database file>` command (not recommended, but sometimes necessary).
 
-Usage of the `atom_debug` binary is the subject of a complete guide on Confluence under the "Developer Tools" category. In short, it allows browsing the database objets in a similar way to a filesystem and gives a large number of tools for displaying, editing and fixing database objects.
+Usage of the `atom_debug` binary is the subject of a [complete guide on Confluence](). In short, it allows the user to browse the database objets in a similar way to a filesystem and gives a large number of tools for displaying, editing and fixing database objects.
 
 > [!WARNING]
 > The size of a decompressed database can be as much as 10 times the compressed size, so make sure your environment has enough available space. Most of the time however, the database includes a large part of empty space which acts as a buffer to prevent performing too many expanding operations. This means the actual size of the database might be much less than it seems (the only way to know is by asking Customer Support). In that case, add the parameter `ignore_db_size=true` in your configuration file to cause the `atom_restore` command to ignore the database size restrictions.
@@ -134,9 +132,9 @@ Usage of the `atom_debug` binary is the subject of a complete guide on Confluenc
 
 # 3. Checking the code history
 
-The Git version control is an invaluable tool to find the cause of issues encountered by clients. Many times, the issue appears soon after an update to a newer version (check `versions.txt` in the EDT report to see the update history). In that case, checking the Git history to find changes from the previous version can limit your search to code added in a shorter period of time.
+The Git version control is an invaluable tool to find the cause of issues encountered by clients. Many times, the issue appears soon after an update to a newer version (check `versions.txt` in the EDT report to see the update history). In that case, checking the Git history to find differences from the previous version can limit your search to a smaller number of changes.
 
-If you don't exactly know when the issue started to appear but are able to (quickly) reproduce it, performing a dichotomy might help pinpoint the defective commit. To do this, first checkout an older commit that you think works properly. Then test it: if the issue is already there, checkout an older commit and test it again. Do this until you find one that works: that's your starting point. From this first commit:
+If you don't exactly know when the issue started to appear but are able to (quickly) reproduce it, performing a dichotomy might help pinpoint the responsible commit. To do this, first checkout an older commit that you think works properly. Then test it: if the issue is already there, checkout an older commit and test it again. Do this until you find one that works: that's your starting point. From this first commit:
 1. Checkout the midpoint of your starting point and the most recent one.
 2. Test it:
 	- If it works, this is your new starting point (the issue appeared later).
@@ -162,13 +160,12 @@ flowchart TD
     L -- Yes --> H
     L -- No --> M([END is bad commit])
 ```
-Usually, after repeating this process a few times, you will end up with a limited number of commits among which only a few are relevant to the issue. You can then manually exclude some of them and keep only one or two for analysis, speeding up the process.
+Usually, after repeating this process a few times, you will end up with a limited number of commits among which only a few are relevant to the issue. You can then manually exclude some of them and keep only one or two for analysis, further speeding up the process.
 
 ---
 
 # 4. Debugging
-
-Many tools are available for debugging running binaries or dumped cores. This section introduces some of the tools that are used by AtomXStore developers, but is very far from being exhaustive. You are of course encouraged to use anything you see fit, but don't forget to add a usage guide on Confluence for new tools!
+Many tools are available for debugging running binaries or dumped cores. This section introduces some of the tools that are used by AtomXStore developers, but is very far from being exhaustive. You are of course encouraged to use anything you see fit, but don't forget to add a usage guide on Confluence for it!
 
 ## 4.1 Standard debug and profiling tools
 
@@ -208,10 +205,10 @@ Those parameters allow identifying specific log calls that will trigger the logS
 
 
 ## 4.3 Useful Linux commands
-This section lists a number of simple commands that are especially useful for debugging AtomXStore issues. Each one is associated, if possible, to a typical use case. Again, this is just a tiny fraction of what is available, so feel free to experiment, research or use what you already know to expand this list.
+This section lists some simple Linux commands that are especially useful for debugging AtomXStore issues. Each one is associated, if possible, to a typical use case. Again, this is just a tiny fraction of what is available, so feel free to experiment, research or use what you already know to expand this list.
 
 ### 4.3.1 Checking the current call stack of a process with pstack
-`pstack` displays the current call of a running process. This is invaluable in cases where you suspect a deadlock issue, to check which processes are trying to take a lock. In cases where a process is running slow, you can loop the command as a quick profiling tool, to check which call appears more often and might be slowing things down.
+`pstack` displays the current call of a running process. This is invaluable in cases where you suspect a deadlock issue, to check which processes are trying to take a lock. In cases where a process is running slow, you can loop the command as a quick profiling tool, to check which call appears more often and might be slowing the process down.
 
 ### 4.3.2 Displaying the mapped memory with pmap
 The command `pmap <PID>` displays a memory map of a running process. Although cases are rare, this can be useful to understand issues related to the memory mapping of the database (for example cases where too much memory is mapped).
