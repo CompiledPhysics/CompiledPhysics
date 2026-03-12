@@ -1,7 +1,7 @@
 > :uk: **About this sample**  
-This is part of a series of how-to guides that I made for various tasks that were common for my team, essential for development, yet were lacking any documentation. This module in particular makes heavy use of templating and is difficult to fully understand even for experienced developers. Very few developers (3 at most) know how to properly make changes in it, yet it was left entirely undocumented for at least 20 years. Even if I didn't fully know the underlying logic, I decided to make this guide first to get a reference for myself and then as a way to limit the risk of the company completely losing this knowledge. Another goal was to help the onboarding of possible new developers in the team.   
+This is part of a series of how-to guides that I made for various tasks that are common for my team, essential for development, yet were lacking any documentation. This module in particular makes heavy use of templating and is difficult to fully understand even for experienced developers. Very few developers (3 at most) know how to properly make changes to it, yet it was left entirely undocumented for at least 20 years. Even if I didn't fully know the underlying logic, I decided to make this guide first to get a reference for myself and then as a way to limit the risk of the company completely losing this knowledge. Another goal was to help the onboarding of possible new developers in the team.   
 This guide assumes basic knowledge of C structures and of our database structures.  
-**To avoid any potential issue with proprietary code, I replaced all internal logic and names by a mock framework**.
+**To avoid any potential issue with proprietary code, I replaced all internal logic and names with a mock framework**.
 
 
 > :fr: **À propos de cet exemple**  
