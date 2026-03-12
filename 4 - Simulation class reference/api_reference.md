@@ -1,8 +1,9 @@
+> [!IMPORTANT]
 > :uk: **About this sample**  
 This document is a reference for classes created for this portfolio, based on my PhD research work, and designed to perform a Monte Carlo simulation in radiotherapy.
 The header files are available in the `Headers` folder and contain their own [documentation in Doxygen format](https://compiledphysics.github.io/CompiledPhysics/).
 
-
+> [!IMPORTANT]
 > :fr: **À propos de cet exemple**  
 Ce document est une référence pour des classes fictives créées pour ce portfolio, basées sur mon travail de thèse, et conçues pour être utilisées pour réaliser une simulation Monte Carlo en radiothérapie.
 Les headers sont disponibles dans le dossier `Headers` et contiennent leur propre [documentation au format Doxygen](https://compiledphysics.github.io/CompiledPhysics/).
@@ -149,7 +150,8 @@ The `void interact()` method performs an interaction between the current `Partic
 
 Giving a null pointer to `insertParticle` has no effect.
 
->:warning: **IMPORTANT** :warning: The `Transporter` takes ownership of any `Particle` added through this method. It may delete them after a step or an interaction and it destroys all remaining particles in its destructor.
+> [!CAUTION]
+>  The `Transporter` takes ownership of any `Particle` added through this method. It may delete them after a step or an interaction and it destroys all remaining particles in its destructor.
 
 ## Typical simulation workflow
 The methods of the `Transporter` are designed to provide the tools for simulating particle tracks. A typical simulation workflow is represented below:
@@ -205,17 +207,20 @@ PseudoDetermTransporter(Source*            source,
                         const std::string& importanceFile);
 ```
 `mode` is the simulation mode, either `PseudoDetermTransporter::Mode::Generation` or `PseudoDetermTransporter::Mode::Usage`.  
->:memo: Note: using an invalid mode will default in `Usage` mode.
+> [!NOTE]
+> Using an invalid mode will default in `Usage` mode.
 
 `roiCenter` is the center of the spherical region of interest (coordinates in cm from the geometry reference).  
 `roiRadius` is the radius of the region of interest (in cm).
 
-`importanceFile` is the path to the importance map file (to either load or save the map depending on the mode).  
->:memo: Note: if no map can be loaded in `Usage` mode, the importance mechanism is disabled.
+`importanceFile` is the path to the importance map file (to either load or save the map depending on the mode).
+> [!NOTE]
+> If no map can be loaded in `Usage` mode, the importance mechanism is disabled.
 
 Because the `Generation` mode is slow and the importance map doesn't need much data to be effective, it is recommended to first generate an importance map with a short run, and then use it for the actual simulation that needs to be optimized.
 
->:warning: **IMPORTANT** :warning: **One** importance map corresponds to **one** region of interest (it defines which regions of space contribute to *this* area in particular) and may decrease efficiency if used improperly. Therefore, in `Usage` mode, the constructor checks the consistency between the current area of interest and the one used to generate the map (stored in the file). If they do not match, the constructor throws `std::invalid_argument`.
+> [!CAUTION]
+> **One** importance map corresponds to **one** region of interest (it defines which regions of space contribute to *this* area in particular) and may decrease efficiency if used improperly. Therefore, in `Usage` mode, the constructor checks the consistency between the current area of interest and the one used to generate the map (stored in the file). If they do not match, the constructor throws `std::invalid_argument`.
 
 ## Accessors
 ### mode
@@ -246,7 +251,8 @@ It performs an interaction as the base `Transporter` does, with additional eleme
 - It sets the `isCopied()` flag to `true` for the original particle.
 - Depending on the local importance, it might delete the current particle and return immediately.
 
->:warning: Although it is limited to 1000 per interaction, this implementation may create a very large number of new particles over time. It increases the overall efficiency, but might increase the time required per initial particle generated (and use a lot of memory during a run).
+> [!WARNING]
+> Although it is limited to 1000 per interaction, this implementation may create a very large number of new particles over time. It increases the overall efficiency, but might increase the time required per initial particle generated (and use a lot of memory during a run).
 
 
 
