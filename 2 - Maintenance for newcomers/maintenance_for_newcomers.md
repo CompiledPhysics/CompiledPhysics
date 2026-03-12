@@ -1,8 +1,9 @@
+> [!IMPORTANT]
 > :uk: **About this sample**  
 This started as a collection of notes I wrote about the maintenance process of (mostly) legacy code: what is the workflow we are supposed to follow, what tools are available to us, how to analyse the data retrieved by Customer Support from the clients... I later organised the notes into this document so that it might help other, new developers with their own maintenance process. This guide assumes some familiarity with our codebase and tools.  
 **To avoid any potential issue with confidentiality, I changed the names of all Atempo-owned assets.**
 
-
+> [!IMPORTANT]
 > :fr: **À propos de cet exemple**  
 Ce document est construit à partir d'une collection de notes que j'ai écrites sur le processus de maintenance du code legacy : quel est le processus à suivre, quels outils sont à notre disposition, comment analyser les données récupérées par le support auprès des clients... J'ai ensuite organisé les notes dans ce document afin qu'il puisse aider d'autres développeurs, moins expérimentés, dans leur propre processus de maintenance. Ce guide suppose une certaine familiarité avec notre base de code et nos outils.  
 **Pour éviter tout problème de confidentialité, j'ai changé les noms de tous les éléments appartenant à Atempo.**
@@ -115,7 +116,8 @@ Your knowledge of the codebase is what will allow you to understand what exactly
 
 Another possibility that is currently being experimented is the use of Cursor AI. You can add the EDT report directory to the current project (AtomXStore sources) to allow Cursor access to the entire report, allowing cross-referencing with the sources. You can then give it all the relevant information from Customer Support and ask for directions.
 
-> :warning: Never blindly trust what Cursor says. AI can be a great tool for brainstorming ideas or finding something obvious you might have overlooked, but it can also very confidently give wrong answers.
+> [!CAUTION]
+> Never blindly trust what Cursor says. AI can be a great tool for brainstorming ideas or finding something obvious you might have overlooked (and can verify), but it can also very confidently give wrong answers.
 
 ## 2.4 Database analysis
 
@@ -125,7 +127,8 @@ Alongside logs, it is sometimes necessary to have direct access to the client's 
 
 Usage of the `atom_debug` binary is the subject of a complete guide on Confluence under the "Developer Tools" category. In short, it allows browsing the database objets in a similar way to a filesystem and gives a large number of tools for displaying, editing and fixing database objects.
 
-> :warning: The size of a decompressed database can be as much as 10 times the compressed size, so make sure your environment has enough available space. Most of the time however, the database includes a large part of empty space which acts as a buffer to prevent performing too many expanding operations. This means the actual size of the database might be much less than it seems (the only way to know is by asking Customer Support). In that case, add the parameter `ignore_db_size=true` in your configuration file to cause the `atom_restore` command to ignore the database size restrictions.
+> [!WARNING]
+> The size of a decompressed database can be as much as 10 times the compressed size, so make sure your environment has enough available space. Most of the time however, the database includes a large part of empty space which acts as a buffer to prevent performing too many expanding operations. This means the actual size of the database might be much less than it seems (the only way to know is by asking Customer Support). In that case, add the parameter `ignore_db_size=true` in your configuration file to cause the `atom_restore` command to ignore the database size restrictions.
 
 ---
 
