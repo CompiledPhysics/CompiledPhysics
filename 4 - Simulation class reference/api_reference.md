@@ -1,5 +1,5 @@
 > :uk: **About this sample**  
-This document is a reference for classes created for this portfolio, based on my PhD research work, and intended to be used to perform a Monte Carlo simulation in radiotherapy.
+This document is a reference for classes created for this portfolio, based on my PhD research work, and designed to perform a Monte Carlo simulation in radiotherapy.
 The header files are available in the `Headers` folder and contain their own [documentation in Doxygen format](https://compiledphysics.github.io/CompiledPhysics/).
 
 
