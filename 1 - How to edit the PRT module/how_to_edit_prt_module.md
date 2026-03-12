@@ -1,10 +1,10 @@
-> [!NOTE]
+> [!IMPORTANT]
 > :uk:  **About this sample**  
 This is part of a series of how-to guides that I made for various tasks that are common for my team, essential for development, yet were lacking any documentation. This module in particular makes heavy use of templating and is difficult to fully understand even for experienced developers. Very few developers (3 at most) know how to properly make changes to it, yet it was left entirely undocumented for at least 20 years. Even if I didn't fully know the underlying logic, I decided to make this guide first to get a reference for myself and then as a way to limit the risk of the company completely losing this knowledge. Another goal was to help the onboarding of possible new developers in the team.   
 This guide assumes basic knowledge of C structures and of our database structures.  
 **To avoid any potential issue with proprietary code, I replaced all internal logic and names with a mock framework**.
 
-> [!NOTE]
+> [!IMPORTANT]
 > :fr: **À propos de cet exemple**  
 Ce document fait partie d'une série de guides pratiques que j'ai rédigés pour diverses tâches courantes au sein de mon équipe, essentielles au développement, mais dépourvues de documentation. Ce module en particulier utilise intensivement le templating et est difficile à comprendre en détail même pour des développeurs expérimentés. Très peu de développeurs (3 au maximum) savent comment y apporter correctement des modifications, mais il est pourtant resté entièrement non documenté pendant au moins 20 ans. Même si je n'en maîtrisais pas entièrement la logique interne, j'ai décidé de rédiger ce guide d'abord pour m'en servir de référence, mais aussi pour limiter le risque que l'entreprise perde complètement ces connaissances. Un autre objectif était de faciliter l'intégration de nouveaux développeurs dans l'équipe.
 Ce guide suppose une connaissance de base des structures en C et de nos structures de base de données.  
