@@ -8,7 +8,8 @@ This repository showcases four Markdown files that reflect my transition into te
 3. [`Thesis Summary`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/3%20-%20Thesis%20Summary/thesis_summary.md) : a short summary of my PhD work and the [full manuscript](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/3%20-%20Thesis%20Summary/Full%20manuscript.pdf) for reference.
 4. [`Simulation class reference`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/4%20-%20Simulation%20class%20reference/api_reference.md) : a class reference for a small simulation framework with [full Doxygen documentation](https://compiledphysics.github.io/CompiledPhysics/).
 
-> :memo: Each one includes some additional context at the beginning.
+> [!NOTE]
+> Each one includes some additional context at the beginning.
 ---
 # :fr: Bienvenue !
 En tant docteur en physique et développeur C++, mon point fort est la documentation qui fait le lien entre des systèmes complexes et les personnes qui doivent les comprendre. Bien que je sois à l'aise avec le code bas niveau, ma préférence est dans la création de guides et d'explications claires qui facilitent la vie des autres.
@@ -20,4 +21,5 @@ Pour illustrer ma transition vers la rédaction technique, ce dépôt rassemble 
 3. [`Thesis Summary`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/3%20-%20Thesis%20Summary/thesis_summary.md) : un court résumé de mon travail de thèse et le [manuscript complet](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/3%20-%20Thesis%20Summary/Full%20manuscript.pdf) pour référence.
 4. [`Simulation class reference`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/4%20-%20Simulation%20class%20reference/api_reference.md) : une référence de classes pour un petit module de simulation avec [documentation Doxygen complète](https://compiledphysics.github.io/CompiledPhysics/).
 
-> :memo: Chaque fichier commence par quelques phrases de contexte supplémentaire.
+> [!NOTE]
+> Chaque fichier commence par quelques phrases de contexte supplémentaire.
