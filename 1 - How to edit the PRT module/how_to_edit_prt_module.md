@@ -66,7 +66,7 @@ In each file, you will find a class called `Tr_<object name>` that represents a 
 
 Each class contains a function `registerFields` that determines which values from that object are transferred through the communication module.
 
-The `registerFields` function contains a list of registering calls, one for each field to register for the object. It takes an `AtomStruct` as a parameter, which represents the basic structure of an object (no need to bother with where it is coming from). Then, the different fields from the object are registered inside the basic `AtomStruct` until the full structure is accounted for (all fields, unions, and nested structures) and matches the database object structure. Registering a field implies declaring in the communication module "this field exists or has existed inside this object in *some* database version" (you will see later how to define *which* version), which is why you might see registering calls for fields that no longer exist in the database object.
+The `registerFields` function itself contains a list of registering calls, one for each field to register for the object. It takes an `AtomStruct` as a parameter, which represents the basic structure of an object. Then, the different fields from the object are registered inside the basic `AtomStruct` until the full structure is accounted for (all fields, unions, and nested structures) and matches the database object structure. Registering a field implies declaring in the communication module "this field exists or has existed inside this object in *some* database version" (you will see later how to define *which* version), which is why you might see registering calls for fields that no longer exist in the database object.
 
 To make changes to the communication module, you only need to edit or add calls to the register functions.
 
@@ -97,6 +97,9 @@ This section will give you the necessary information to add or edit any register
 
 ### First parameter : name
 `<name>` defines the name of the field in the `TR` structure. It is simply a `const char*` value, for example `"field_name"`, and must match the name declared in the database (see `atom_structures.h`).
+
+> [!IMPORTANT]
+> A name that doesn't match causes compilation errors.
 
 ### Second parameter : PRT type descriptor
 The correct PRT type descriptor to use depends on the type of the field in the `TR` structure. The most common type descriptors include:
@@ -134,11 +137,12 @@ The `RegisterInfo` parameter also contains the versioning information, mainly in
 | `disappeared(<version>)` | Specifies the field was deleted in the version `<version>`|
 | `changed(<version>)` | Specifies the field was modified in the version `<version>`|
 
-The communication module versions are values defined in `prt_versions.h`. To add versioning information, append the correct method call to the `RegisterInfo`.
+The communication module versions are values defined in `prt_versions.h`. To add versioning information, simply append the correct method call to the `RegisterInfo`.
 > [!TIP]
 > For example, use `RegisterInfo().added(PRT_VERSION_8_1)` for a field added in version `8.1`.
 
-Both transfer mask and versioning information can be combined, such as `RegisterInfo().mask(transfer_mask, TRANSFER_MASK_NAME).added(PRT_VERSION_8_1)`, and multiple versioning calls can coexist to account for the full history of a specific field.
+> [!TIP]
+> Both transfer mask and versioning information can be combined, such as `RegisterInfo().mask(transfer_mask, TRANSFER_MASK_NAME).added(PRT_VERSION_8_1)`, and multiple versioning calls can coexist to account for the full history of a specific field.
 
 ## Complete declaration sample
 A complete declaration for a single field of an object might look like this:  
@@ -154,7 +158,7 @@ atom.register("atom_name",
 * `atom_name` is the field name (of type `char*`) inside the `TR` structure.
 * The field is located inside the union `u.str` of the `TR_ATOM_TRANSFER` structure.
 * The server will only transfer this field through the network if the `TRANSFER_MASK_NAME` is set in the request from the client.
-* It was added in version `8.1` and later removed in version `9.0`.
+* The field was added in version `8.1` and later removed in version `9.0`.
 
 
 <!---___________________________________________________-->
@@ -163,10 +167,14 @@ atom.register("atom_name",
 Clients might use an older version of AtomXStore that uses a previous communication module and database version. In addition to the versioning information, some adaptations must sometimes be made to account for the discrepancies between older and newer versions, requiring more than the typical versioning mechanism.
 
 ## Setting a value aside
-Sometimes, when fields are removed from the communication module, the value of these fields from the incoming messages can still be needed (for instance, for upgrade purposes: the previous value is read, used to compute a new value, then discarded). In this case, use the `LOCAL_VAR(<class name>, <variable name>)` macro instead of the `FIELD_POSITION` macro for the position accessor parameter of the `register` function.  
-This puts the value received from the `TR` structure into the local variable `<variable name>`, which is a private member variable of this class. The `<class name>` in the macro is the name of the class representing the current object in the communication module (for example `Tr_stream`).
+Sometimes, when fields are removed from the communication module, the value of these fields from the incoming messages can still be needed (for instance, for upgrade purposes: the previous value is read, used to compute a new value, then discarded). 
 
-If you need to set a value aside, declare this local variable as a private class member in the corresponding header and **do not forget to initialize it in the `Tr_<object name>` class constructor and free the allocated memory in the destructor if necessary**. Once initialized with the received value, this variable can be used in post-processing (see below).
+In this case, first add a member variable (let's say `<variable name>`) in the class representing the current object in the communication module (for example `Tr_stream`). This variable will be used to store the received value. Then, use the `LOCAL_VAR(<class name>, <variable name>)` macro instead of `FIELD_POSITION` for the position accessor parameter of the `register` function. This puts the value received from the `TR` structure into the member variable `<variable name>`. 
+Once initialized with the received value, this variable can be used in post-processing (see below).
+ 
+> [!WARNING]
+> **Do not forget to initialize the member variable in the `Tr_<object name>` class constructor and free the allocated memory in the destructor if necessary**.
+
 
 ## Pre-processing and post-processing
 The `Tr_` classes can contain a `preProcessing` function to manage the `TR` structures that will be sent to a client, *before* actually sending them, and a `postProcessing` that manages incoming `TR` structures *before* forwarding them to the database. Contrary to what the names might suggest, both operations are done **after** registering the fields.
