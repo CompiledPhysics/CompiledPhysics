@@ -167,9 +167,9 @@ atom.register("atom_name",
 Clients might use an older version of AtomXStore that uses a previous communication module and database version. In addition to the versioning information, some adaptations must sometimes be made to account for the discrepancies between older and newer versions, requiring more than the typical versioning mechanism.
 
 ## Setting a value aside
-Sometimes, when fields are removed from the communication module, the value of these fields from the incoming messages can still be needed (for instance, for upgrade purposes: the previous value is read, used to compute a new value, then discarded). 
+Sometimes, when fields are removed from the communication module, their value from the incoming messages can still be needed (for instance, for upgrade purposes: the previous value is read, used to compute a new value, then discarded). 
 
-In this case, first add a member variable (let's say `<variable name>`) in the class representing the current object in the communication module (for example `Tr_stream`). This variable will be used to store the received value. Then, use the `LOCAL_VAR(<class name>, <variable name>)` macro instead of `FIELD_POSITION` for the position accessor parameter of the `register` function. This puts the value received from the `TR` structure into the member variable `<variable name>`. 
+In this case, first add a member variable (let's call it `<variable name>`) in the class representing the current object in the communication module (for example `Tr_stream`). This variable will be used to store the received value. Then, use the `LOCAL_VAR(<class name>, <variable name>)` macro instead of `FIELD_POSITION` for the position accessor parameter of the `register` function. This puts the value received from the `TR` structure into the member variable `<variable name>`. 
 Once initialized with the received value, this variable can be used in post-processing (see below).
  
 > [!WARNING]
@@ -177,7 +177,7 @@ Once initialized with the received value, this variable can be used in post-proc
 
 
 ## Pre-processing and post-processing
-The `Tr_` classes can contain a `preProcessing` function to manage the `TR` structures that will be sent to a client, *before* actually sending them, and a `postProcessing` that manages incoming `TR` structures *before* forwarding them to the database. Contrary to what the names might suggest, both operations are done **after** registering the fields.
+The `Tr_` classes can contain a `preProcessing` function to manage the `TR` structures that will be sent to a client, *before* actually sending them, and a `postProcessing` function that manages incoming `TR` structures *before* forwarding them to the database. Contrary to what the names might suggest, both operations are done **after** registering the fields.
 
 <p align="center">
 	<img src="Images/prepostprocessing.png" width="600" /><br>
@@ -186,7 +186,7 @@ The `Tr_` classes can contain a `preProcessing` function to manage the `TR` stru
 
 The parameters of both `preProcessing` and `postProcessing` are:
 - A `TR` structure (the one that will be edited).
-- A `clientVersion` identifying the version of the client.
+- A `clientVersion` that identifies the version of the client.
 
 The first thing to do in pre/post-processing is to test the `clientVersion` value. Then you can make changes to the content of the current `TR` structure as necessary, according to the client version (this is where stored values can be useful).
 
@@ -199,7 +199,7 @@ Similarly, passwords received from older clients must be decrypted with the prev
 <!---___________________________________________________-->
 
 # Checking the validity of changes
-Once you have made changes in a PRT file, always check their validity. The first and easiest step is compiling the code on Linux : the communication module validity checker will make sure no changes have been inadvertently made to the history of previous communication module versions, ensuring cross-version compatibility was not broken.
+Once you have made changes in a PRT file, always check their validity. The first and easiest step is compiling the code on Linux: the communication module validity checker will make sure no changes have been inadvertently made to the history of previous communication module versions, ensuring cross-version compatibility was not broken.
 
 Then, on whichever operating system you used for compilation, copy the `Build/.../Bin/prt_generate` binary into your `AtomXStore/Bin/` directory. Run it with the `-version <version>` option to generate an XML file describing a specific communication module version. Then:
 * Generate the XML file for the previous version and check that it is identical to the one archived in the AtomXStore sources (in `Sources/PRT/Versions/`). This will also ensure that you did not change the history of communication module versions (though this should be caught earlier by the validity checker on Linux).
