@@ -15,7 +15,7 @@ J'ai ajouté le manuscrit complet au dépôt comme référence technique.
 ## Introduction: the hidden side of radiotherapy
 Radiotherapy is currently one of the pillars of cancer treatment. It uses a medical accelerator that generates high-energy radiation to destroy tumors while sparing healthy tissue. Although it has become extremely precise at targeting cancer cells, the laws of physics make it impossible to completely eliminate side effects.
 Indeed, when radiation hits a patient, it does not stop at the tumor but instead spreads out. This creates what is called the peripheral dose: small amounts of radiation that reach healthy organs, sometimes far from the treated area.  
-Although these doses are low, they are not without risk. It has been shown that this stray radiation is a likely cause of secondary cancers, appearing years or even decades after treatment. Current clinical tools are very good at calculating the dose inside the beam, but often ignore the peripheral dose because it is extremely demanding in terms of computing resources.
+Although these doses are low, they are not without risk. It has been shown that this stray radiation is a likely cause of secondary cancers, which may appear years or even decades after treatment. Current clinical tools are very good at calculating the dose inside the beam, but often ignore the peripheral dose because it is extremely demanding in terms of computing resources.
 <p align="center">
 	<img src="Images/stray_radiation_en.png" width="400" /><br>
 	<em>A diagram showing a radiation beam targeting a tumor, and scattered particles reaching distant parts of the body.</em>
@@ -63,5 +63,5 @@ We then carried out experimental validation. We set up real experiments using a 
 	<em>A graph showing the uncertainty on the dose result for a simulation of a radiation beam in a water tank (second image). The uncertainty increases rapidly with the distance because fewer particles reach these regions. Inside the region of interest (the sphere on the right), the result is extremely precise and the uncertainty is close to 0%.</em>
 </p>
 
-## Conclusion: faster calculations for a better protection
-The ultimate goal of this work was to provide a proof of concept for the clinical use of the pseudo-deterministic transport. Making peripheral dose calculations fast enough for daily use could help doctors choose treatment plans that minimize the risk of secondary cancers, and thus make radiotherapy safer in the long run. It could also allow gathering peripheral dose data, ignored by conventional treatment planning systems, which could improve our currently limited knowledge of the effects of low radiation doses.
+## Conclusion: faster calculations for better protection
+The ultimate goal of this work was to provide a proof of concept for the clinical use of the pseudo-deterministic transport. Making peripheral dose calculations fast enough for daily use could help doctors choose treatment plans that minimize the risk of secondary cancers, and thus make radiotherapy safer in the long run. It could also allow for the collection of peripheral dose data, ignored by conventional treatment planning systems, which could improve our currently limited knowledge of the effects of low radiation doses.
