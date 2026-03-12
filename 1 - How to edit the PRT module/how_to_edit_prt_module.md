@@ -1,9 +1,10 @@
-> :uk: **About this sample**  
+> [!NOTE]
+> :uk:  **About this sample**  
 This is part of a series of how-to guides that I made for various tasks that are common for my team, essential for development, yet were lacking any documentation. This module in particular makes heavy use of templating and is difficult to fully understand even for experienced developers. Very few developers (3 at most) know how to properly make changes to it, yet it was left entirely undocumented for at least 20 years. Even if I didn't fully know the underlying logic, I decided to make this guide first to get a reference for myself and then as a way to limit the risk of the company completely losing this knowledge. Another goal was to help the onboarding of possible new developers in the team.   
 This guide assumes basic knowledge of C structures and of our database structures.  
 **To avoid any potential issue with proprietary code, I replaced all internal logic and names with a mock framework**.
 
-
+> [!NOTE]
 > :fr: **À propos de cet exemple**  
 Ce document fait partie d'une série de guides pratiques que j'ai rédigés pour diverses tâches courantes au sein de mon équipe, essentielles au développement, mais dépourvues de documentation. Ce module en particulier utilise intensivement le templating et est difficile à comprendre en détail même pour des développeurs expérimentés. Très peu de développeurs (3 au maximum) savent comment y apporter correctement des modifications, mais il est pourtant resté entièrement non documenté pendant au moins 20 ans. Même si je n'en maîtrisais pas entièrement la logique interne, j'ai décidé de rédiger ce guide d'abord pour m'en servir de référence, mais aussi pour limiter le risque que l'entreprise perde complètement ces connaissances. Un autre objectif était de faciliter l'intégration de nouveaux développeurs dans l'équipe.
 Ce guide suppose une connaissance de base des structures en C et de nos structures de base de données.  
@@ -107,21 +108,24 @@ The correct PRT type descriptor to use depends on the type of the field in the `
 | `PRTStr()`| std::string |
 | `PRTSize()`| size_t |
 
-Refer to the file `prt_type_descriptors.cpp` for a full list of PRT type descriptors.
+> [!TIP]
+> Refer to the file `prt_type_descriptors.cpp` for a full list of PRT type descriptors.
 
 ### Third parameter : position accessor
 Position accessors specify where in the `TR` structure the value of the field will be stored (in the case of sending a message to a client) or is expected (in the case of receiving a message from a client).
 
 Use the macro `FIELD_POSITION(<TR structure>, <field position in structure>)` to call position accessors.
 
-> :bulb: For example, use `FIELD_POSITION(TR_ATOM_TRANSFER, u.str.u.xtr.atom_name)` for the field `atom_name` inside nested unions `u.str.u.xtr` of the `TR_ATOM_TRANSFER` structure.
+> [!TIP]
+> For example, use `FIELD_POSITION(TR_ATOM_TRANSFER, u.str.u.xtr.atom_name)` for the field `atom_name` inside nested unions `u.str.u.xtr` of the `TR_ATOM_TRANSFER` structure.
 
 ### Fourth parameter : RegisterInfo
 This parameter is used to specify a transfer mask (optional) and versioning information (mandatory). Its basic form is simply `RegisterInfo()` and can be used as such.
 
 To add a transfer mask, append it to the `RegisterInfo()` parameter: `RegisterInfo().mask(transfer_mask, <TRANSFER_MASK>)`. The variable `transfer_mask` is a parameter of the `registerFields` function for structures than can use transfer masks. Each mask corresponds to a `#define` in `tr_masks.h`. 
 
-> :bulb: Transfer masks determine which fields of the object are filtered when the structure is sent through the network. Client requests can come with a transfer mask, thus requesting the `TR` structure to be filled with only part of its data. This is especially useful for large fields (such as text fields), which might slow down the network transfer without being necessarily useful to the client at the time.
+> [!NOTE]
+> Transfer masks determine which fields of the object are filtered when the structure is sent through the network. Client requests can come with a transfer mask, thus requesting the `TR` structure to be filled with only part of its data. This is especially useful for large fields (such as text fields), which might slow down the network transfer without being necessarily useful to the client at the time.
 
 The `RegisterInfo` parameter also contains the versioning information, mainly in the form of three optional calls:
 | Syntax | Effect |
@@ -131,8 +135,8 @@ The `RegisterInfo` parameter also contains the versioning information, mainly in
 | `changed(<version>)` | Specifies the field was modified in the version `<version>`|
 
 The communication module versions are values defined in `prt_versions.h`. To add versioning information, append the correct method call to the `RegisterInfo`.
-> :bulb: For example, use
-`RegisterInfo().added(PRT_VERSION_8_1)` for a field added in version `8.1`.
+> [!TIP]
+> For example, use `RegisterInfo().added(PRT_VERSION_8_1)` for a field added in version `8.1`.
 
 Both transfer mask and versioning information can be combined, such as `RegisterInfo().mask(transfer_mask, TRANSFER_MASK_NAME).added(PRT_VERSION_8_1)`, and multiple versioning calls can coexist to account for the full history of a specific field.
 
@@ -178,7 +182,8 @@ The parameters of both `preProcessing` and `postProcessing` are:
 
 The first thing to do in pre/post-processing is to test the `clientVersion` value. Then you can make changes to the content of the current `TR` structure as necessary, according to the client version (this is where stored values can be useful).
 
-> :bulb: One example of the use of pre-processing is a change in the encryption algorithm used for stored passwords. Passwords from the database, encrypted with the newest algorith, must be decrypted and then re-encrypted with the previous algorithm to be sent to older clients. Without this step, older clients cannot decrypt the passwords.  
+> [!NOTE]
+> One example of the use of pre-processing is a change in the encryption algorithm used for stored passwords. Passwords from the database, encrypted with the newest algorith, must be decrypted and then re-encrypted with the previous algorithm to be sent to older clients. Without this step, older clients cannot decrypt the passwords.  
 Similarly, passwords received from older clients must be decrypted with the previous algorithm in post-processing, then re-encrypted with the new one before being safely stored.
 
 
