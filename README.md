@@ -1,9 +1,9 @@
 # :uk: Welcome!
-As a physics PhD and C++ developer, what I do best is documentation that bridges the gap between complex systems and the people who need to understand them. While I'm comfortable working with low-level code, I find the most value in creating clear guides and explanations that make other people's life easier.
+As a physics PhD and C++ developer, what I do best is documentation that bridges the gap between complex systems and the people who need to understand them. Although I'm comfortable working with low-level code, I find the most value in creating clear guides and explanations that make other people's lives easier.
 
 This repository showcases four Markdown files that reflect my transition into technical writing through varied documentation formats and approaches:
 
-1. [`How to edit the PRT module`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/1%20-%20How%20to%20edit%20the%20PRT%20module/how_to_edit_prt_module.md) : a practical guide to making changes in an old legacy module.
+1. [`How to edit the PRT module`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/1%20-%20How%20to%20edit%20the%20PRT%20module/how_to_edit_prt_module.md) : a practical guide to making changes in a legacy module.
 2. [`Maintenance for newcomers`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/2%20-%20Maintenance%20for%20newcomers/maintenance_for_newcomers.md) : an introduction to the codebase maintenance process and to the associated tools.
 3. [`Thesis Summary`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/3%20-%20Thesis%20Summary/thesis_summary.md) : a short summary of my PhD work and the [full manuscript](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/3%20-%20Thesis%20Summary/Full%20manuscript.pdf) for reference.
 4. [`Simulation class reference`](https://github.com/CompiledPhysics/CompiledPhysics/blob/main/4%20-%20Simulation%20class%20reference/api_reference.md) : a class reference for a small simulation framework with [full Doxygen documentation](https://compiledphysics.github.io/CompiledPhysics/).
