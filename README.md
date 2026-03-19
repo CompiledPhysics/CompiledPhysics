@@ -1,5 +1,5 @@
 # :uk: Welcome!
-As a physics PhD and C++ developer, what I do best is documentation that bridges the gap between complex systems and the people who need to understand them. Although I'm comfortable working with low-level code, I find the most value in creating clear guides and explanations that make other people's lives easier.
+As a physics PhD and C++ developer, what I do best is documentation that bridges the gap between complex systems and the people who need to understand them. Although I'm comfortable working with low-level code, I find the most value in creating clear guides and explanations that make other people's work easier.
 
 This repository showcases four Markdown files that reflect my transition into technical writing through varied documentation formats and approaches:
 
@@ -12,7 +12,7 @@ This repository showcases four Markdown files that reflect my transition into te
 > Each one includes some additional context at the beginning.
 ---
 # :fr: Bienvenue !
-En tant docteur en physique et développeur C++, mon point fort est la documentation qui fait le lien entre des systèmes complexes et les personnes qui doivent les comprendre. Bien que je sois à l'aise avec le code bas niveau, ma préférence est dans la création de guides et d'explications claires qui facilitent la vie des autres.
+En tant docteur en physique et développeur C++, mon point fort est la documentation qui fait le lien entre des systèmes complexes et les personnes qui doivent les comprendre. Bien que je sois à l'aise avec le code bas niveau, ma préférence est dans la création de guides et d'explications claires qui facilitent le travail des autres.
 
 Pour illustrer ma transition vers la rédaction technique, ce dépôt rassemble quatre fichiers Markdown illustrant différents formats et approches de documentation:
 
