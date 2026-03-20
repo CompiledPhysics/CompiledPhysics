@@ -12,7 +12,7 @@ Ce guide suppose une connaissance de base des structures en C et de nos structur
 
 ---
 
-# Summary
+# Table of Contents
 - [What this guide is for](#What-this-guide-is-for)
 - [Introduction to the PRT communication module](#Introduction-to-the-PRT-communication-module)
 - [Adding or editing communication module declarations](#Adding-or-editing-communication-module-declarations)
