@@ -11,7 +11,7 @@ Ce document est construit à partir d'une collection de notes que j'ai écrites 
 
 ---
 
-# Summary
+# Table of Contents
 - [1. Maintenance workflow](#1-Maintenance-workflow)
 - [2. Analysis of available data](#2-Analysis-of-available-data)
 	- [2.1 Environment Diagnostic Tool report analysis](#21-Environment-Diagnostic-Tool-report-analysis)
