@@ -12,7 +12,7 @@ This repository showcases four Markdown files that reflect my transition into te
 > Each one includes some additional context at the beginning.
 ---
 # :fr: Bienvenue !
-En tant docteur en physique et développeur C++, mon point fort est la documentation qui fait le lien entre des systèmes complexes et les personnes qui doivent les comprendre. Bien que je sois à l'aise avec le code bas niveau, ma préférence est dans la création de guides et d'explications claires qui facilitent le travail des autres.
+En tant que docteur en physique et développeur C++, mon point fort est la documentation qui fait le lien entre des systèmes complexes et les personnes qui doivent les comprendre. Bien que je sois à l'aise avec le code bas niveau, ma préférence est dans la création de guides et d'explications claires qui facilitent le travail des autres.
 
 Pour illustrer ma transition vers la rédaction technique, ce dépôt rassemble quatre fichiers Markdown illustrant différents formats et approches de documentation:
 
