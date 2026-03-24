@@ -105,7 +105,9 @@ Both of those can be overridden with various transport algorithms and physical m
 ## Constructor & Destructor
 The `Transporter`'s only constructor uses the following prototype:
 
-`Transporter(Source*, Geometry*)`
+```cpp
+Transporter(Source*, Geometry*)
+```
 
 The `Source` and `Geometry` must be allocated and initialized before the `Transporter` is constructed. Both are tested for pointer validity (giving `nullptr` for any of them will result in throwing `std::invalid_argument`), but cannot be tested for functional validity.
 The user is responsible for correctly initializing these objects.
@@ -117,14 +119,18 @@ The user is responsible for correctly initializing these objects.
 ### particles
 The `Particle` list can be accessed with a constant reference to the internal vector:
 
-`const std::vector<Particle*>& particles() const noexcept`
+```cpp
+const std::vector<Particle*>& particles() const noexcept
+```
 
 This can be used to monitor the state of the particle list and access any individual `Particle`, but does not allow adding or deleting particles. For this, use `insertParticle(Particle*)` instead.
 
 ## Simulation methods
 ### initializeFromSource
 
-`virtual void initializeFromSource(int particleNumber)`
+```cpp
+virtual void initializeFromSource(int particleNumber)
+```
 
 This method is used to add to the internal list the requested number `particleNumber` of particles created from the `Source`. It is recommended to create batches of many particles rather than adding them one by one, as the method will be able to reserve the vector memory only once to improve performance.
 
@@ -200,7 +206,7 @@ In addition to the base class, it uses an internal `ImportanceMap` pointer (allo
 
 ## Constructor & Destructor
 The constructor uses the same `Source` and `Geometry` as the base class, but has additional parameters regarding the region of interest and the importance map:
-```
+```cpp
 PseudoDetermTransporter(Source*            source,
                         Geometry*          geometry,
                         Mode               mode,
@@ -259,7 +265,7 @@ It performs an interaction as the base `Transporter` does, with additional eleme
 ## Usage example
 This is a minimal example of the use of the `PseudoDetermTransporter` for a Monte Carlo simulation.
 
-```
+```cpp
 #include "PseudoDetermTransporter.hpp"
 
 int main()
