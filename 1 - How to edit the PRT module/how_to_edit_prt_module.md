@@ -87,7 +87,7 @@ The available registering methods from the `AtomStruct` class are listed in the 
 ## Basic syntax for registering a field
 To register a field, use the following syntax:
 
-```
+```cpp
 <AtomStruct>.register(<name>, <PRT type descriptor>, <position accessor>, <RegisterInfo>)
 ```
 where `AtomStruct` is the (usually only) parameter of the `registerFields` function.
@@ -146,7 +146,7 @@ The communication module versions are values defined in `prt_versions.h`. To add
 
 ## Complete declaration sample
 A complete declaration for a single field of an object might look like this:  
-```
+```cpp
 // Sample: register the atom_name field of the TR_ATOM_TRANSFER structure
 atom.register("atom_name",
 		PRTCharPtr(),
