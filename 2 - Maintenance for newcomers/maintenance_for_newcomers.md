@@ -185,7 +185,7 @@ For those using Visual Studio or Visual Studio Code, a debug module is available
 
 The AtomXStore code include a special mechanism called "logStop" for debugging using the logging function calls as breakpoints. To use this feature, add the following parameters to your XML configuration file:
 
-```
+```xml
 <parameter name="logStop_function"><value>  function  </value> </parameter>
 <parameter name="logStop_functionID"><value> id </value> </parameter>
 <parameter name="logStop_effect"><value>  effect  </value> </parameter>
