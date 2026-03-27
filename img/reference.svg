@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200">
+  <g fill="none" stroke="#9d4edd" stroke-width="5" opacity="1" transform="matrix(1, 0, 0, 1, -1.604594, 20.659142)">
+    <ellipse cx="100" cy="75" rx="70" ry="25" transform="rotate(45, 100, 75)"/>
+    <ellipse cx="100" cy="75" rx="70" ry="25" transform="rotate(-45, 100, 75)"/>
+  </g>
+  <g fill="none" stroke="#980cb8" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" transform="matrix(1, 0, 0, 1, -2.607464, 19.455696)">
+    <path d="M40,110 C40,120 50,130 70,130 L85,130 C100,130 100,145 100,145 C100,145 100,130 115,130 L130,130 C150,130 160,120 160,110"/>
+  </g>
+  <defs>
+    <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0" style="stop-color:#f5f5f5; stop-opacity:1"/>
+      <stop offset="0.4" style="stop-color:#a0a0a0; stop-opacity:1"/>
+      <stop offset="1" style="stop-color:#606060; stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  <g transform="matrix(0.365552, 0, 0, 0.370778, 53.879601, 66.952347)" style="">
+    <path fill="url(#gearGradient)" d=" M100,20 L115,20 L122,38 L142,46 L160,36 L171,46 L161,66 L171,85 L192,93 L192,107 L171,115 L161,134 L171,154 L160,164 L142,154 L122,162 L115,180 L85,180 L78,162 L58,154 L40,164 L29,154 L39,134 L29,115 L8,107 L8,93 L29,85 L39,66 L29,46 L40,36 L58,46 L78,38 L85,20 Z M100,70 A30,30 0 1,0 100,130 A30,30 0 1,0 100,70 Z" fill-rule="evenodd"/>
+    <circle cx="100" cy="100" r="45" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.4"/>
+    <circle cx="100" cy="100" r="30" fill="none" stroke="#404040" stroke-width="1.5"/>
+  </g>
+  <g transform="matrix(0.269158, 0, 0, 0.279473, 22.52508, -36.98999)" style="transform-origin: 100px 100px 0px;">
+    <path fill="url(#gearGradient)" d=" M100,20 L115,20 L122,38 L142,46 L160,36 L171,46 L161,66 L171,85 L192,93 L192,107 L171,115 L161,134 L171,154 L160,164 L142,154 L122,162 L115,180 L85,180 L78,162 L58,154 L40,164 L29,154 L39,134 L29,115 L8,107 L8,93 L29,85 L39,66 L29,46 L40,36 L58,46 L78,38 L85,20 Z M100,70 A30,30 0 1,0 100,130 A30,30 0 1,0 100,70 Z" fill-rule="evenodd"/>
+    <circle cx="100" cy="100" r="45" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.4"/>
+    <circle cx="100" cy="100" r="30" fill="none" stroke="#404040" stroke-width="1.5"/>
+  </g>
+</svg>
